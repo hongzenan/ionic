@@ -9,6 +9,7 @@ import { AngularFireModule } from 'angularfire2';
 import { HomePage } from '../pages/home/home';
 import { LoginPage } from '../pages/login/login';
 import { RegisterPage } from '../pages/register/register';
+import { TestPage } from '../pages/test/test';
 
 // services
 import { AuthService } from '../providers/auth-service';
@@ -27,7 +28,8 @@ const config = {
     MyApp,
     HomePage,
     LoginPage,
-    RegisterPage
+    RegisterPage,
+    TestPage
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -38,7 +40,8 @@ const config = {
     MyApp,
     HomePage,
     LoginPage,
-    RegisterPage
+    RegisterPage,
+    TestPage
   ],
   providers: [
     AuthService,
