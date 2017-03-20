@@ -16,9 +16,6 @@
   .navbar-padding {
     padding-left: 20px;
   }
-  .scroll-content {
-    overflow-y: hidden;
-  }
   .toolbar-background {
     background: url("../../assets/navbar-background.png")
   }
@@ -49,8 +46,8 @@
     background-color: lightpink;
     .user-logo {
       height: 200px;
-      padding: 50px 80px;
-      background: url("../assets/logo.jpg") no-repeat 80px 50px;
+      padding: 30px 73px;
+      background: url("../assets/logo.jpg") no-repeat 73px 30px;
       background-size: 100px 100px;
     }
   }
@@ -73,5 +70,21 @@
       width: 50%;
       display: inline-block;
     }
+  }
+  .list-header-md {
+    margin-bottom: 0px;
+    background-color: dodgerblue
+  }
+  .list-md {
+    margin: 0px;    
+  }
+  .item-md {
+    padding-left: 0px;
+  }
+  .item-inner {
+    padding-left: 10px;
+  }
+  .item-background {
+    background-color: lightblue;
   }
 }

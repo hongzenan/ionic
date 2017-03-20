@@ -1,12 +1,12 @@
 <ion-menu [content]="content" id="app-page">
   <ion-header>
-
     <ion-toolbar>
       <ion-title class="navbar-padding">列表</ion-title>
     </ion-toolbar>
-
   </ion-header>
-  <ion-content class="scroll-content">
+  <!--content-->
+  <ion-content>
+    <!--user bar-->
     <div style="font-size: 0px;">
       <div class="user-bar">
         <span>864442843@qq.com</span>
@@ -15,15 +15,50 @@
         Logout
       </button>
     </div>
+    <!--user logo-->
     <div class="user-logo-wrap">
       <div class="user-logo">
         image
       </div>
     </div>
+    <!--user diary-->
     <div class="user-diary-count-wrap">
       <div class="user-diary-today-count">today</div>
       <div class="user-diary-all-count">al</div>
     </div>
+    <!--search bar-->
+    <div class="search-bar">
+      <ion-searchbar [(ngModel)]="myInput" [showCancelButton]="shouldShowCancel" (ionInput)="onInput($event)" (ionCancel)="onCancel($event)">
+      </ion-searchbar>
+    </div>
+    <!--items-->
+    <ion-list>
+      <button ion-item class="item-background" (click)="toggleForDate()">
+        date
+      </button>
+
+      <div *ngIf="toggleDate">
+        <ion-label icon-only class="">
+        <ion-icon name="calendar" class=""></ion-icon>
+      </ion-label>
+      <!--<ion-datetime displayFormat="YYYY年MM月DD日" [(ngModel)]="visitTime" class="" min="2010-12-31" max="2030" pickerFormat="YYYY MM DD"
+        doneText='确认' cancelText='取消'>
+      </ion-datetime>-->
+      </div>
+
+      <button ion-item class="item-background" (click)="toggleForItem1()">
+        item1
+      </button>
+      <ion-list *ngIf="toggleItem1">
+        <button ion-item *ngFor="let item of items1">{{item}} is good</button>
+      </ion-list>
+      <button ion-item class="item-background" (click)="toggleForItem2()">
+        item2
+      </button>
+      <ion-list *ngIf="toggleItem2">
+        <button ion-item *ngFor="let item of items2">{{item}} is bad</button>
+      </ion-list>
+    </ion-list>
   </ion-content>
 </ion-menu>
 
