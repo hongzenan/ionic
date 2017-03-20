@@ -1,13 +1,29 @@
-<ion-menu [content]="content">
+<ion-menu [content]="content" id="app-page">
   <ion-header>
+
     <ion-toolbar>
-      <ion-title>Pages</ion-title>
+      <ion-title class="navbar-padding">列表</ion-title>
     </ion-toolbar>
+
   </ion-header>
-  <ion-content>
-    <p>hel</p>
-    <page-test></page-test>
-    <!--add your page or content here-->
+  <ion-content class="scroll-content">
+    <div style="font-size: 0px;">
+      <div class="user-bar">
+        <span>864442843@qq.com</span>
+      </div>
+      <button class="user-logout">
+        Logout
+      </button>
+    </div>
+    <div class="user-logo-wrap">
+      <div class="user-logo">
+        image
+      </div>
+    </div>
+    <div class="user-diary-count-wrap">
+      <div class="user-diary-today-count">today</div>
+      <div class="user-diary-all-count">al</div>
+    </div>
   </ion-content>
 </ion-menu>
 

@@ -9,10 +9,12 @@ import { AngularFireModule } from 'angularfire2';
 import { HomePage } from '../pages/home/home';
 import { LoginPage } from '../pages/login/login';
 import { RegisterPage } from '../pages/register/register';
-import { TestPage } from '../pages/test/test';
 
 // services
 import { AuthService } from '../providers/auth-service';
+
+// cloud-angular
+import { CloudModule, CloudSettings } from '@ionic/cloud-angular';
 
 // Initialize Firebase
 const config = {
@@ -23,25 +25,31 @@ const config = {
   messagingSenderId: "965263778566"
 };
 
+// setting for cloud-angular
+const cloudSettings: CloudSettings = {
+  'core': {
+    'app_id': 'APP_ID'
+  }
+};
+
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
     LoginPage,
-    RegisterPage,
-    TestPage
+    RegisterPage
   ],
   imports: [
     IonicModule.forRoot(MyApp),
-    AngularFireModule.initializeApp(config)
+    AngularFireModule.initializeApp(config),
+    CloudModule.forRoot(cloudSettings)
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
     HomePage,
     LoginPage,
-    RegisterPage,
-    TestPage
+    RegisterPage
   ],
   providers: [
     AuthService,

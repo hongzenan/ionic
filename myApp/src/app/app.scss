@@ -1,6 +1,4 @@
 // http://ionicframework.com/docs/v2/theming/
-
-
 // App Global Sass
 // --------------------------------------------------
 // Put style rules here that you want to apply globally. These
@@ -14,3 +12,66 @@
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
+#app-page {
+  .navbar-padding {
+    padding-left: 20px;
+  }
+  .scroll-content {
+    overflow-y: hidden;
+  }
+  .toolbar-background {
+    background: url("../../assets/navbar-background.png")
+  }
+  .user-bar {
+    font-size: 16px;
+    height: 40px;
+    width: 70%;
+    white-space: nowrap;
+    // overflow: hidden;
+    // text-overflow: ellipsis;
+    background-color: lightgreen;
+    line-height: 40px;
+    text-align: center;
+    display: inline-block;
+  }
+  .user-logout {
+    font-size: 16px;
+    height: 40px;
+    width: 30%;
+    background-color: deepskyblue;
+    line-height: 40px;
+    vertical-align: top;
+    text-align: center;
+    display: inline-block;
+  }
+  .user-logo-wrap {
+    height: 200px;
+    background-color: lightpink;
+    .user-logo {
+      height: 200px;
+      padding: 50px 80px;
+      background: url("../assets/logo.jpg") no-repeat 80px 50px;
+      background-size: 100px 100px;
+    }
+  }
+  .user-diary-count-wrap {
+    font-size: 0px;
+    height: 40px;
+    margin-top: -40px;
+    text-align: center;
+    .user-diary-today-count {
+      font-size: 16px;
+      background-color: blue;
+      line-height: 40px;
+      width: 50%;
+      display: inline-block;
+    }
+    .user-diary-all-count {
+      font-size: 16px;
+      background-color: blue;
+      line-height: 40px;
+      width: 50%;
+      display: inline-block;
+    }
+  }
+}
