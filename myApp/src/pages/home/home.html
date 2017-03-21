@@ -10,6 +10,88 @@
 </ion-header>
 
 <ion-content padding class="scroll-content">
+  <ion-list>
+    <ion-list-header>
+      haha
+    </ion-list-header>
+    <button ion-item *ngFor="let item of items1" class="diary-item">
+      <div class="tag-color-side-bar"></div>
+      <div class="item-time-middle-bar">
+        <div class="item-time-bar-one">a</div>
+        <div class="item-time-bar-one">b</div>
+        <div class="item-time-bar-one">c</div>
+      </div>
+      <div class="item-content-preview">
+        <div class="item-content-preview-title">a</div>
+        <div class="item-content-preview-tags">
+          <div class="item-content-preview-tags-item">
+            <ion-icon name="add"></ion-icon>
+          </div>
+          <div class="item-content-preview-tags-item">
+            <ion-icon name="image"></ion-icon>
+          </div>
+          <div class="item-content-preview-tags-item">
+            <ion-icon name="pin"></ion-icon>
+          </div>
+        </div>
+      </div>
+    </button>
+  </ion-list>
+  <ion-list>
+    <ion-list-header>
+      haha
+    </ion-list-header>
+    <button ion-item *ngFor="let item of items2" class="diary-item">
+      <div class="tag-color-side-bar"></div>
+      <div class="item-time-middle-bar">
+        <div class="item-time-bar-one">a</div>
+        <div class="item-time-bar-one">b</div>
+        <div class="item-time-bar-one">c</div>
+      </div>
+      <div class="item-content-preview">
+        <div class="item-content-preview-title">a</div>
+        <div class="item-content-preview-tags">
+          <div class="item-content-preview-tags-item">
+            <ion-icon name="add"></ion-icon>
+          </div>
+          <div class="item-content-preview-tags-item">
+            <ion-icon name="add"></ion-icon>
+          </div>
+          <div class="item-content-preview-tags-item">
+            <ion-icon name="add"></ion-icon>
+          </div>
+        </div>
+      </div>
+    </button>
+  </ion-list>
+  <ion-list>
+    <ion-list-header>
+      haha
+    </ion-list-header>
+    <button ion-item *ngFor="let item of items3" class="diary-item">
+      <div class="tag-color-side-bar"></div>
+      <div class="item-time-middle-bar">
+        <div class="item-time-bar-one">a</div>
+        <div class="item-time-bar-one">b</div>
+        <div class="item-time-bar-one">c</div>
+      </div>
+      <div class="item-content-preview">
+        <div class="item-content-preview-title">a</div>
+        <div class="item-content-preview-tags">
+          <div class="item-content-preview-tags-item">
+            <ion-icon name="add"></ion-icon>
+          </div>
+          <div class="item-content-preview-tags-item">
+            <ion-icon name="add"></ion-icon>
+          </div>
+          <div class="item-content-preview-tags-item">
+            <ion-icon name="add"></ion-icon>
+          </div>
+        </div>
+      </div>
+    </button>
+  </ion-list>
+
   <button ion-button (click)="show()">Show</button>
   <ion-list>
     <div>
@@ -23,4 +105,10 @@
   </ul>
   <button ion-button (click)="signout()">Logout</button>
   <button ion-button (click)="save()">Save</button>
+
+  <ion-fab bottom right="10px">
+    <button ion-fab (click)="addTopic()">
+     <ion-icon name="add"></ion-icon>
+   </button>
+  </ion-fab>
 </ion-content>

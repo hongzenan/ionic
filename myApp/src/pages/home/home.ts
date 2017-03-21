@@ -16,6 +16,10 @@ export class HomePage {
     user_detail: any;
     user: any;
     items: FirebaseListObservable<any>;
+    items1: string[] = ['item1 child1', 'item1 child2', 'item1 child3'];
+    items2: string[] = ['item2 child1', 'item2 child2', 'item2 child3'];
+    items3: string[] = ['item3 child1', 'item3 child2', 'item3 child3'];
+    myColor: string = "primary";
 
     constructor(public navCtrl: NavController, public angfire: AngularFire, private authservice: AuthService) {
         this.user = "";
@@ -45,7 +49,6 @@ export class HomePage {
 
     signout() {
         this.authservice.signOut();
-        let user = window.localStorage.getItem('currentuser');
         this.navCtrl.push(LoginPage);
     }
 
@@ -53,4 +56,7 @@ export class HomePage {
         console.log("new item success")
     }
 
+    addTopic() {
+        
+    }
 }

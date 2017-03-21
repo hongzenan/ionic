@@ -2,4 +2,66 @@ page-home {
   .scroll-content {
     overflow-y: auto;
   }
+  .list-md {
+    margin: 0px 0px 17px;
+  }
+  .list-header-md {
+    margin-bottom: 0px;
+    background-color: whitesmoke;
+    border-top: none;
+  }
+  .item-md {
+    padding-left: 0px;
+  }
+  .item-inner {
+    padding-left: 0px;
+  }
+  .label-md {
+    margin: 0px;
+  }
+  ion-list-header {
+    .item-inner {
+      padding-left: 10px;
+    }
+  }
+  .diary-item {
+    background-color: cadetblue;
+    .tag-color-side-bar {
+      height: 51px;
+      line-height: 51px;
+      width: 3px;
+      vertical-align: top;
+      background-color: blue;
+      display: inline-block;
+    }
+    .item-time-middle-bar {
+      line-height: 51px;
+      width: 80px;
+      vertical-align: top;
+      background-color: red;
+      display: inline-block;
+      .item-time-bar-one {
+        height: 17px;
+        line-height: 17px;
+        padding-left: 10px;
+      }
+    }
+    .item-content-preview {
+      line-height: 51px;
+      vertical-align: top;
+      background-color: green;
+      display: inline-block;
+      .item-content-preview-title {
+        height: 34px;
+        line-height: 34px;
+      }
+      .item-content-preview-tags {
+        height: 17px;
+        line-height: 17px;
+        .item-content-preview-tags-item {
+          display: inline-block;
+        }
+      }
+    }
+  }
 }
