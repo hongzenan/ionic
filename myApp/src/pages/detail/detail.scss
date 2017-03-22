@@ -1,0 +1,49 @@
+page-detail {
+  .fab-md {
+    width: 40px;
+    height: 40px;
+  }
+  .image-wrap {
+    height: 150px;
+    width: 100%;
+    overflow: hidden;
+    background-color: lightgreen;
+    .image {}
+  }
+  .list-icon-wrap {
+    height: 20px;
+    width: 100%;
+    background-color: lightblue;
+    .list-icon-fab {
+      padding-left: 180px;
+      margin-top: -20px;
+    }
+  }
+  .time-wrap {
+    height: 60px;
+    width: 100%;
+    background-color: yellowgreen;
+    .time-day {
+      width: 60px;
+      height: 60px;
+      line-height: 60px;
+      background-color: red;
+      display: inline-block;
+    }
+    .time-date {
+      width: 145px;
+      height: 60px;
+      line-height: 60px;
+      background-color: blue;
+      display: inline-block;
+    }
+    .time-time {
+      width: 60px;
+      height: 60px;
+      line-height: 60px;
+      background-color: green;
+      display: inline-block;
+    }
+  }
+  
+}

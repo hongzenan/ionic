@@ -14,7 +14,7 @@
     <ion-list-header>
       haha
     </ion-list-header>
-    <button ion-item *ngFor="let item of items1" class="diary-item">
+    <button ion-item *ngFor="let item of items1" class="diary-item" (click)="goToDetail(item)">
       <div class="tag-color-side-bar"></div>
       <div class="item-time-middle-bar">
         <div class="item-time-bar-one">a</div>

@@ -4,6 +4,7 @@ import { AngularFire, FirebaseListObservable } from 'angularfire2';
 
 // pages
 import { LoginPage } from '../login/login';
+import { DetailPage } from '../detail/detail';
 
 // services
 import { AuthService } from '../../providers/auth-service';
@@ -52,11 +53,14 @@ export class HomePage {
         this.navCtrl.push(LoginPage);
     }
 
-    newItem() {
-        console.log("new item success")
+    addTopic() {
+
     }
 
-    addTopic() {
-        
+    goToDetail(item) {
+        console.log("item: ", item);
+        this.navCtrl.push(DetailPage, {
+            "item": item
+        });
     }
 }
