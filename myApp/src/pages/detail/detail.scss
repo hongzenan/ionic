@@ -4,6 +4,9 @@ page-detail {
     height: 40px;
   }
   .image-wrap {
+    :hover{
+      cursor: pointer;
+    }
     height: 150px;
     width: 100%;
     overflow: hidden;
@@ -45,5 +48,33 @@ page-detail {
       display: inline-block;
     }
   }
-  
+  .text-title {
+    // width: 100%;
+    height: 30px;
+    line-height: 30px;
+    background-color: green;
+  }
+  .text-content {
+    // width: 100%;
+    min-height: 30px;
+    line-height: 30px;
+    height: auto;
+    // border-bottom: 1px;
+    background-color: pink;
+  }
+  .tag-wrap {
+    margin-top: 20px;
+    height: 60px;
+    background-color: navajowhite;
+    .tag-tags {
+      padding: 8px;
+      height: 30px;
+      background-color: blue;
+    }
+    .tag-locate {
+      padding: 8px;
+      height: 30px;
+      background-color: green;
+    }
+  }
 }

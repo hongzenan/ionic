@@ -10,6 +10,8 @@ import { HomePage } from '../pages/home/home';
 import { LoginPage } from '../pages/login/login';
 import { RegisterPage } from '../pages/register/register';
 import { DetailPage } from '../pages/detail/detail';
+import { ImagesPage } from '../pages/images/images';
+import { ImageDetailPage } from '../pages/image-detail/image-detail';
 
 // services
 import { AuthService } from '../providers/auth-service';
@@ -31,7 +33,9 @@ const config = {
     HomePage,
     LoginPage,
     RegisterPage,
-    DetailPage
+    DetailPage,
+    ImagesPage,
+    ImageDetailPage
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -43,7 +47,9 @@ const config = {
     HomePage,
     LoginPage,
     RegisterPage,
-    DetailPage
+    DetailPage,
+    ImagesPage,
+    ImageDetailPage
   ],
   providers: [
     AuthService,

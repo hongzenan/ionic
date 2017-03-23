@@ -9,7 +9,7 @@
   <ion-navbar>
     <ion-title>detail</ion-title>
     <ion-buttons end>
-      <button ion-button>
+      <button ion-button (click)="chooseImage()">
         <ion-icon name="image"></ion-icon>
       </button>
       <button ion-button>
@@ -25,12 +25,12 @@
 
 
 <ion-content padding>
-  <div class="image-wrap">
-    <div><img src="../../assets/logo.jpg"></div>
+  <div class="image-wrap" (click)="imageDetail()">
+    <div><img src="../../assets/image.jpg"></div>
   </div>
   <div class="list-icon-wrap">
     <ion-fab class="list-icon-fab">
-      <button ion-fab>
+      <button ion-fab (click)="goToImages()">
         <ion-icon name="apps"></ion-icon>
       </button>
     </ion-fab>
@@ -48,6 +48,18 @@
     </div>
   </div>
 
-  <div style="width: 270px;min-height: 30px;line-height: 30px;height: auto;border-bottom: 1px;background-color: pink;" contenteditable="true">
+  <div class="text-title">
+
+  </div>
+  <div class="text-content" contenteditable="true">
+  </div>
+
+  <div class="tag-wrap">
+    <div class="tag-tags">
+      <ion-icon name="pricetag"></ion-icon>
+    </div>
+    <div class="tag-locate">
+      <ion-icon name="pin"></ion-icon>
+    </div>
   </div>
 </ion-content>
