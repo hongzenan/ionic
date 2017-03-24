@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, AlertController } from 'ionic-angular';
+import { NavController, NavParams, ActionSheetController } from 'ionic-angular';
 
 import { ImagesPage } from '../images/images';
 import { ImageDetailPage } from '../image-detail/image-detail';
@@ -17,7 +17,7 @@ import { ImageDetailPage } from '../image-detail/image-detail';
 export class DetailPage {
   item: string;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public actionCtrl: ActionSheetController) {
     this.item = this.navParams.get("item");
     console.log("detail page: ", this.item);
   }
@@ -27,38 +27,33 @@ export class DetailPage {
   }
 
   chooseImage() {
-    let alert = this.alertCtrl.create({
+    let actionSheet = this.actionCtrl.create({
       title: "choose images",
-      inputs: [
-        {
-          name: 'username',
-          placeholder: "Username",
-          type: 'button'
-        },
-        {
-          name: 'password',
-          placeholder: "Password",
-          type: 'password'
-        }
-      ],
       buttons: [
         {
-          text: 'Cancel',
-          role: 'cancel',
-          handler: data => {
-            console.log('Calcel clicked');
+          text: 'Destructive',
+          role: 'destructive',
+          handler: () => {
+            console.log('Destructive clicked');
           }
         },
         {
-          text: 'Login',
-          handler: data => {
-            console.log('Login');
+          text: 'Archive',
+          handler: () => {
+            console.log('Archive clicked');
+          }
+        },
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
           }
         }
       ]
     });
 
-    alert.present();
+    actionSheet.present();
   }
 
   goToImages() {
