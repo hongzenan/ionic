@@ -1,5 +1,5 @@
 import { Component } from '@angular/core'
-import { NavController } from 'ionic-angular';
+import { NavController, ToastController } from 'ionic-angular';
 import { AngularFire, FirebaseListObservable } from 'angularfire2';
 
 // pages
@@ -22,7 +22,8 @@ export class HomePage {
     items3: string[] = ['item3 child1', 'item3 child2', 'item3 child3'];
     myColor: string = "primary";
 
-    constructor(public navCtrl: NavController, public angfire: AngularFire, private authservice: AuthService) {
+    constructor(public navCtrl: NavController, public angfire: AngularFire, private authservice: AuthService,
+        public toastCtrl: ToastController) {
         this.user = "";
         if (!this.isLoggedin()) {
             console.log("You are not logged in")
@@ -54,7 +55,11 @@ export class HomePage {
     }
 
     addTopic() {
-
+        let toast = this.toastCtrl.create({
+            message: 'User was',
+            duration: 3000
+        });
+        toast.present();
     }
 
     goToDetail(item) {
