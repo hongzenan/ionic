@@ -41,8 +41,8 @@
       </button>
       <ion-list *ngIf="toggleItem1">
         <button style="border-left: 2px;border-left-color: blue;" ion-item *ngFor="let item of items1">{{item}} is good</button>
-        <button ion-item>
-          <ion-icon style="padding-left: 110px" name="add" (click)="addTag()"></ion-icon>
+        <button ion-item (click)="addTag()">
+          <ion-icon style="padding-left: 110px" name="add"></ion-icon>
         </button>
       </ion-list>
       <button ion-item class="item-background" (click)="toggleForItem2()">
