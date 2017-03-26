@@ -12,6 +12,7 @@ import { RegisterPage } from '../pages/register/register';
 import { DetailPage } from '../pages/detail/detail';
 import { ImagesPage } from '../pages/images/images';
 import { ImageDetailPage } from '../pages/image-detail/image-detail';
+import { AddTagPage } from '../pages/add-tag/add-tag';
 
 // services
 import { AuthService } from '../providers/auth-service';
@@ -35,7 +36,8 @@ const config = {
     RegisterPage,
     DetailPage,
     ImagesPage,
-    ImageDetailPage
+    ImageDetailPage,
+    AddTagPage
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -49,7 +51,8 @@ const config = {
     RegisterPage,
     DetailPage,
     ImagesPage,
-    ImageDetailPage
+    ImageDetailPage,
+    AddTagPage
   ],
   providers: [
     AuthService,

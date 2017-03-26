@@ -37,10 +37,14 @@ export class HomePage {
     }
 
     save() {
-        this.user_detail = window.localStorage.getItem('firebase:authUser:AIzaSyDRnt4FM3wfjsIW3_oLQJSSsxN5oFF9Xeg:[DEFAULT]');
-        let user_uid = JSON.parse(this.user_detail).uid;
+        this.user_detail = JSON.parse(window.localStorage.getItem('firebase:authUser:AIzaSyDRnt4FM3wfjsIW3_oLQJSSsxN5oFF9Xeg:[DEFAULT]'));
+        let user_uid = this.user_detail.uid;
         const user_database_point = this.angfire.database.object('users/' + user_uid);
-        user_database_point.set({ name: "kane" });
+        console.log("a: ", user_database_point);
+        user_database_point.subscribe(response => {
+            console.log("resp: ", response);
+        })
+        user_database_point.set({ name1: "kane1" });
     }
 
     isLoggedin() {
