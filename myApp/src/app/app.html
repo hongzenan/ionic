@@ -28,9 +28,13 @@
       </button>
 
       <div *ngIf="toggleDate">
-        <ion-label icon-only class="">
+        <calendar [eventSource]="eventSource" [calendarMode]="calendar.mode" [currentDate]="calendar.currentDate" (onCurrentDateChanged)="onCurrentDateChanged($event)"
+          (onRangeChanged)="reloadSource(startTime, endTime)" (onEventSelected)="onEventSelected($event)" (onTitleChanged)="onViewTitleChanged($event)"
+          (onTimeSelected)="onTimeSelected($event)" step="30">
+        </calendar>
+        <!--<ion-label icon-only class="">
           <ion-icon name="calendar" class=""></ion-icon>
-        </ion-label>
+        </ion-label>-->
         <!--<ion-datetime displayFormat="YYYY年MM月DD日" [(ngModel)]="visitTime" class="" min="2010-12-31" max="2030" pickerFormat="YYYY MM DD"
         doneText='确认' cancelText='取消'>
       </ion-datetime>-->
@@ -40,7 +44,7 @@
         item1
       </button>
       <ion-list *ngIf="toggleItem1">
-        <button style="border-left: 2px;border-left-color: blue;" ion-item *ngFor="let item of items1">{{item}} is good</button>
+        <button ion-item *ngFor="let item of items1" (click)="deleteTag(item)">{{item}} is good</button>
         <button ion-item (click)="addTag()">
           <ion-icon style="padding-left: 110px" name="add"></ion-icon>
         </button>
@@ -49,7 +53,10 @@
         item2
       </button>
       <ion-list *ngIf="toggleItem2">
-        <button ion-item *ngFor="let item of items2">{{item}} is bad</button>
+        <button ion-item *ngFor="let item of items2" (click)="deleteLocate(item)">{{item}} is bad</button>
+        <button ion-item (click)="addLocate()">
+          <ion-icon style="padding-left: 110px" name="add"></ion-icon>
+        </button>
       </ion-list>
     </ion-list>
   </ion-content>

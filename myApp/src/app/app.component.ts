@@ -1,10 +1,10 @@
-import { Component, ViewChild } from '@angular/core';
-import { Platform, AlertController} from 'ionic-angular';
-import { StatusBar, Splashscreen } from 'ionic-native'
+import { Component } from '@angular/core';
+import { Platform, AlertController } from 'ionic-angular';
+import { StatusBar, Splashscreen } from 'ionic-native';
 
 import { HomePage } from '../pages/home/home';
 
-import { AngularFire, FirebaseListObservable } from 'angularfire2';
+import { AngularFire } from 'angularfire2';
 import * as firebase from 'firebase';
 
 @Component({
@@ -13,16 +13,21 @@ import * as firebase from 'firebase';
 export class MyApp {
   // @ViewChild('content') navCtrl: NavController;
   rootPage: any = HomePage
+  // the basic user information
   user: any;
   email: string = "";
   picture: string = "";
+  // user detail and user_uid
   user_detail: any;
   user_uid: any;
+  // search input
   myInput: string = "";
+  // for toggle items
   toggleDate: boolean = false;
   toggleItem1: boolean = false;
   toggleItem2: boolean = false;
   addTagItem: string;
+  addLocateItem: string;
   items1: string[] = [];
   items2: string[] = [];
 
@@ -43,15 +48,17 @@ export class MyApp {
     //get tags from firebase
     const database_tags = this.angfire.database.object('users/' + this.user_uid + '/tags');
     database_tags.subscribe(response => {
+      console.log('tag in constructure: ', response);
       this.items1 = [];
       for (let i of response) {
-        console.log("i: ", i);
         this.items1.push(i);
       }
     });
     // get locate from firebase
     const database_locates = this.angfire.database.object('users/' + this.user_uid + '/locates');
     database_locates.subscribe(response => {
+      console.log('locate in constructure: ', response);
+      this.items2 = [];
       for (let i of response) {
         this.items2.push(i);
       }
@@ -76,7 +83,6 @@ export class MyApp {
   }
 
   addTag() {
-    console.log("tag: ");
     let alertTag = this.alertCtrl.create({
       title: '标签',
       message: "请输入标签",
@@ -100,7 +106,7 @@ export class MyApp {
             this.items1.push(this.addTagItem);
             console.log("data: ", data.tag);
             const database_tags = this.angfire.database.object('users/' + this.user_uid + '/tags');
-            database_tags.update(this.items1);
+            database_tags.set(this.items1);
             console.log("dada: ", this.items1);
           }
         }
@@ -108,6 +114,60 @@ export class MyApp {
     });
 
     alertTag.present();
+  }
+
+  deleteTag(item) {
+    let index = this.items1.indexOf(item);
+    if (index > -1) {
+      console.log('index: ', index);
+      this.items1.splice(index, 1);
+      console.log('the last item: ', this.items1);
+    }
+    const database_tags = this.angfire.database.object('users/' + this.user_uid + '/tags');
+    database_tags.set(this.items1);
+  }
+
+  addLocate() {
+    let alertLocate = this.alertCtrl.create({
+      title: '位置',
+      message: '请输入位置',
+      inputs: [
+        {
+          name: 'locate',
+          placeholder: 'Locate'
+        }
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+          handler: data => {
+            console.log('add locate: ', data.locate);
+          }
+        },
+        {
+          text: 'Save',
+          handler: data => {
+            this.addLocateItem = data.locate;
+            console.log('locate: ', data);
+            this.items2.push(this.addLocateItem);
+            const database_locates = this.angfire.database.object('users/' + this.user_uid + '/locates');
+            database_locates.set(this.items2);
+            console.log('this item2: ', this.items2);
+          }
+        }
+      ]
+    });
+
+    alertLocate.present();
+  }
+
+  deleteLocate(item) {
+    let index = this.items2.indexOf(item);
+    if (index > -1) {
+      this.items2.splice(index, 1);
+    }
+    const database_locates = this.angfire.database.object('users/' + this.user_uid + '/locates');
+    database_locates.set(this.items2);
   }
 
   toggleForItem2() {
