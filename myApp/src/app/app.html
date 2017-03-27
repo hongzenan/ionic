@@ -28,10 +28,15 @@
       </button>
 
       <div *ngIf="toggleDate">
-        <calendar [eventSource]="eventSource" [calendarMode]="calendar.mode" [currentDate]="calendar.currentDate" (onCurrentDateChanged)="onCurrentDateChanged($event)"
-          (onRangeChanged)="reloadSource(startTime, endTime)" (onEventSelected)="onEventSelected($event)" (onTitleChanged)="onViewTitleChanged($event)"
-          (onTimeSelected)="onTimeSelected($event)" step="30">
-        </calendar>
+        <calendar 
+        [noEventsLabel]="test"
+        [calendarMode]="calendar.mode"
+        [currentDate]="calendar.currentDate"
+        (onCurrentDateChanged)="onCurrentDateChanged($event)"
+        (onTitleChanged)="onViewTitleChanged($event)"
+        (onTimeSelected)="onTimeSelected($event)"
+        step="60">
+      </calendar>
         <!--<ion-label icon-only class="">
           <ion-icon name="calendar" class=""></ion-icon>
         </ion-label>-->
