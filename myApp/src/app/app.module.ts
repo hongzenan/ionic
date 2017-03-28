@@ -5,8 +5,6 @@ import { MyApp } from './app.component';
 // Import the AF2 Module
 import { AngularFireModule } from 'angularfire2';
 
-import { NgCalendarModule } from 'ionic2-calendar';
-
 // pages
 import { HomePage } from '../pages/home/home';
 import { LoginPage } from '../pages/login/login';
@@ -14,6 +12,7 @@ import { RegisterPage } from '../pages/register/register';
 import { DetailPage } from '../pages/detail/detail';
 import { ImagesPage } from '../pages/images/images';
 import { ImageDetailPage } from '../pages/image-detail/image-detail';
+import { CalendarPage } from '../pages/calendar/calendar';
 
 // services
 import { AuthService } from '../providers/auth-service';
@@ -37,12 +36,12 @@ const config = {
     RegisterPage,
     DetailPage,
     ImagesPage,
-    ImageDetailPage
+    ImageDetailPage,
+    CalendarPage
   ],
   imports: [
     IonicModule.forRoot(MyApp),
-    AngularFireModule.initializeApp(config),
-    NgCalendarModule
+    AngularFireModule.initializeApp(config)
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -52,7 +51,8 @@ const config = {
     RegisterPage,
     DetailPage,
     ImagesPage,
-    ImageDetailPage
+    ImageDetailPage,
+    CalendarPage
   ],
   providers: [
     AuthService,

@@ -27,22 +27,8 @@
         date
       </button>
 
-      <div *ngIf="toggleDate">
-        <calendar 
-        [noEventsLabel]="test"
-        [calendarMode]="calendar.mode"
-        [currentDate]="calendar.currentDate"
-        (onCurrentDateChanged)="onCurrentDateChanged($event)"
-        (onTitleChanged)="onViewTitleChanged($event)"
-        (onTimeSelected)="onTimeSelected($event)"
-        step="60">
-      </calendar>
-        <!--<ion-label icon-only class="">
-          <ion-icon name="calendar" class=""></ion-icon>
-        </ion-label>-->
-        <!--<ion-datetime displayFormat="YYYY年MM月DD日" [(ngModel)]="visitTime" class="" min="2010-12-31" max="2030" pickerFormat="YYYY MM DD"
-        doneText='确认' cancelText='取消'>
-      </ion-datetime>-->
+      <div class="date-wrap" *ngIf="toggleDate">
+        <page-calendar></page-calendar>
       </div>
 
       <button ion-item class="item-background" (click)="toggleForItem1()">
