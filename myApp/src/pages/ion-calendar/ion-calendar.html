@@ -1,0 +1,56 @@
+<div class="calendar-container">
+  <ion-grid>
+    <ion-row class="calendar-controls">
+      <ion-col width-25 text-left>
+        <button ion-button icon-only clear (click)="previousMonth()">
+                    <ion-icon name="arrow-back"></ion-icon>
+                </button>
+      </ion-col>
+      <ion-col width-50 text-center class="selectedDateLabel">
+        <h5 class="selectedMonthLabel">{{ currentDate | date:'MMMM yyyy' }}</h5>
+        <button *ngIf="showTodayButton" (click)="setToday()" ion-button small outline>{{ todayText }}</button>
+      </ion-col>
+      <ion-col width-25 text-right>
+        <button ion-button icon-only clear (click)="nextMonth()">
+                    <ion-icon name="arrow-forward"></ion-icon>
+                </button>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="calendar-weekDays">
+      <ion-col text-center class="calendar-week-day">
+        {{ weekDays[0] }}
+      </ion-col>
+      <ion-col text-center class="calendar-week-day">
+        {{ weekDays[1] }}
+      </ion-col>
+      <ion-col text-center class="calendar-week-day">
+        {{ weekDays[2] }}
+      </ion-col>
+      <ion-col text-center class="calendar-week-day">
+        {{ weekDays[3] }}
+      </ion-col>
+      <ion-col text-center class="calendar-week-day">
+        {{ weekDays[4] }}
+      </ion-col>
+      <ion-col text-center class="calendar-week-day">
+        {{ weekDays[5] }}
+      </ion-col>
+      <ion-col text-center class="calendar-week-day">
+        {{ weekDays[6] }}
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid (swipeleft)="useSwipe && nextMonth()" (swiperight)="useSwipe && previousMonth()">
+    <ion-row *ngFor="let row of rows" class="calendar-row">
+      <ion-col *ngFor="let day of row; let i = index" text-center class="calendar-col">
+        <div class="circle"></div>
+        <button no-padding block class="calendar-day" *ngIf="day" ion-button clear (click)="dateClicked(day)" id="calendar-day-{{day}}"
+          [disabled]="pastDates.indexOf(day) > -1 || weekDaysToDisable.indexOf(i) > -1 || daysToDisable.indexOf(day) > -1">
+                    {{ day }}
+                </button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</div>

@@ -59,11 +59,7 @@ export class HomePage {
     }
 
     addTopic() {
-        let toast = this.toastCtrl.create({
-            message: 'User was',
-            duration: 3000
-        });
-        toast.present();
+        this.navCtrl.push(DetailPage);
     }
 
     goToDetail(item) {

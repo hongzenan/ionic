@@ -1,0 +1,45 @@
+ion-calendar {
+  .calendar-controls ion-col[width-25] button {
+    margin-top: 20% !important;
+  }
+  .calendar-row {
+    max-height: 40px;
+    .calendar-col {
+      position: relative;
+      padding: 0px;
+      margin: 5px;
+      .circle {
+        position: absolute;
+        left: 11px;
+        top: 4px;
+        width: 4px;
+        height: 4px;
+        -moz-border-radius: 4px;
+        -webkit-border-radius: 4px;
+        border-radius: 4px;
+      }
+      button {
+        height: 24px;
+        margin-top: 10px;
+        max-height: 32px;
+      }
+    }
+  }
+  .calendar-week-day {
+    max-width: 15%;
+  }
+  .calendar-day {
+    font-size: 1.3em;
+  }
+  .selected {
+    background-color: #30d05f !important;
+    color: white;
+  }
+  .hasEvents {
+    border-bottom: 2px solid red;
+  }
+  .selectedMonthLabel {
+    text-transform: capitalize;
+    margin-bottom: 0px;
+  }
+}

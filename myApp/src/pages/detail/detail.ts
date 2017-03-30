@@ -16,10 +16,14 @@ import { ImageDetailPage } from '../image-detail/image-detail';
 })
 export class DetailPage {
   item: string;
+  date: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public actionCtrl: ActionSheetController) {
     this.item = this.navParams.get("item");
     console.log("detail page: ", this.item);
+
+    this.date = new Date();
+    console.log('date: ', this.date.getDate());
   }
 
   ionViewDidLoad() {

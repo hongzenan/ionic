@@ -12,7 +12,7 @@ import { RegisterPage } from '../pages/register/register';
 import { DetailPage } from '../pages/detail/detail';
 import { ImagesPage } from '../pages/images/images';
 import { ImageDetailPage } from '../pages/image-detail/image-detail';
-import { CalendarPage } from '../pages/calendar/calendar';
+import { IonCalendar } from '../pages/ion-calendar/ion-calendar';
 
 // services
 import { AuthService } from '../providers/auth-service';
@@ -37,7 +37,7 @@ const config = {
     DetailPage,
     ImagesPage,
     ImageDetailPage,
-    CalendarPage
+    IonCalendar
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -52,7 +52,7 @@ const config = {
     DetailPage,
     ImagesPage,
     ImageDetailPage,
-    CalendarPage
+    IonCalendar
   ],
   providers: [
     AuthService,
