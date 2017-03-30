@@ -12,7 +12,7 @@ import { RegisterPage } from '../pages/register/register';
 import { DetailPage } from '../pages/detail/detail';
 import { ImagesPage } from '../pages/images/images';
 import { ImageDetailPage } from '../pages/image-detail/image-detail';
-import { IonCalendar } from '../pages/ion-calendar/ion-calendar';
+import { IonCalendar } from '../components/ion-calendar/ion-calendar';
 
 // services
 import { AuthService } from '../providers/auth-service';
