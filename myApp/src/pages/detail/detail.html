@@ -37,14 +37,19 @@
   </div>
 
   <div class="time-wrap">
-    <div class="time-day">
-      
-    </div>
-    <div class="time-date">
-      
-    </div>
-    <div class="time-time">
-      
+    <button class="time-date" style="background-color: white;" (click)="showCalendar()">
+      {{ dateContain.date }}
+    </button>
+    <button class="time-day" style="background-color: white;" (click)="showCalendar()">
+      <div class="time-day-weekday">
+        {{ dateContain.day }}
+      </div>
+      <div class="time-day-month">
+        {{ dateContain.month }} {{ dateContain.year }}
+      </div>
+    </button>
+    <div class="time-time" style="background-color: white;">
+      <ion-datetime class="time-time" displayFormat="h:mm A" pickerFormat="h mm A" [(ngModel)]="event.timeStarts"></ion-datetime>
     </div>
   </div>
 

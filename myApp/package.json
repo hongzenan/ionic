@@ -26,6 +26,7 @@
     "firebase": "^3.7.0",
     "ionic-angular": "2.0.1",
     "ionic-native": "2.4.1",
+    "ionic2-date-picker": "^1.0.5",
     "ionicons": "3.0.0",
     "localforage": "^1.5.0",
     "ng2-resource-rest": "^1.10.1",

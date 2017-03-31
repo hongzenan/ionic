@@ -17,6 +17,8 @@ import { IonCalendar } from '../components/ion-calendar/ion-calendar';
 // services
 import { AuthService } from '../providers/auth-service';
 
+import { DatePicker } from 'ionic2-date-picker/ionic2-date-picker';
+
 
 // Initialize Firebase
 const config = {
@@ -37,7 +39,8 @@ const config = {
     DetailPage,
     ImagesPage,
     ImageDetailPage,
-    IonCalendar
+    IonCalendar,
+    DatePicker
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -52,7 +55,8 @@ const config = {
     DetailPage,
     ImagesPage,
     ImageDetailPage,
-    IonCalendar
+    IonCalendar,
+    DatePicker
   ],
   providers: [
     AuthService,
