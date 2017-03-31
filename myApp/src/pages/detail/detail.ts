@@ -131,11 +131,11 @@ export class DetailPage {
   }
 
   ionViewWillLeave() {
+    let array = this.event.timeStarts.split(':');
+    this.dateContain.hours = array[0];
+    this.dateContain.minutes = array[1];
     console.log('view will leave: ', this.dateContain);
-    console.log('view will leave: ', this.event.timeStarts);
-    console.log('view will leave: ', this.event.timeStarts);
-    console.log('view will leave: ', this.event.timeStarts);
-    console.log('view will leave: ', this.event.timeStarts);
+    console.log('view will leave: ', this.event.timeStarts.split(':')[1]);
   }
 
   ionViewDidLeave() {
