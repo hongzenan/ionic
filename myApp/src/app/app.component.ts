@@ -30,8 +30,8 @@ export class MyApp {
   addLocateItem: string;
   items1: string[] = [];
   items2: string[] = [];
-  // for calendar
-  
+  diarys: any[] = [];
+
 
   constructor(platform: Platform, public angfire: AngularFire,
     public alertCtrl: AlertController) {
@@ -64,6 +64,16 @@ export class MyApp {
       for (let i of response) {
         this.items2.push(i);
       }
+    });
+    // get diarys from firebase
+    const database_diarys = this.angfire.database.object('users/' + this.user_uid + '/diarys');
+    database_diarys.subscribe(response => {
+      console.log('diary in constructure: ', response);
+      this.diarys = [];
+      for (let i of response) {
+        this.diarys.push(i);
+      }
+      window.localStorage.setItem('diarys', JSON.stringify(this.diarys));
     });
   }
 
@@ -181,5 +191,5 @@ export class MyApp {
   }
 
   // for calendar
-  
+
 }

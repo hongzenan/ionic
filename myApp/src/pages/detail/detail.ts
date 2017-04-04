@@ -5,6 +5,7 @@ import { ImagesPage } from '../images/images';
 import { ImageDetailPage } from '../image-detail/image-detail';
 import { DatePicker } from 'ionic2-date-picker/ionic2-date-picker';
 
+import { AngularFire } from 'angularfire2';
 
 /*
   Generated class for the Detail page.
@@ -18,6 +19,10 @@ import { DatePicker } from 'ionic2-date-picker/ionic2-date-picker';
   providers: [DatePicker]
 })
 export class DetailPage {
+  // user
+  user_uid: any;
+  user_detail: any;
+  // date
   item: string;
   date: Date;
   dateContain = {
@@ -41,14 +46,24 @@ export class DetailPage {
   public event = {
     timeStarts: ''
   }
-
+  text = {
+    title: '',
+    content: 'aa'
+  }
+  diarys: any[] = [];
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
-    public actionCtrl: ActionSheetController, public datePicker: DatePicker) {
+    public actionCtrl: ActionSheetController, public datePicker: DatePicker,
+    public angfire: AngularFire) {
     this.item = this.navParams.get("item");
     console.log("detail page: ", this.item);
-
-    this.date = new Date();
+    // TODO: initalize date for diary item
+    if (this.item) {
+      this.date = new Date();
+      this.date.setDate(2);
+    } else {
+      this.date = new Date();
+    }
     this.translateDate();
     this.translateTime();
 
@@ -57,10 +72,21 @@ export class DetailPage {
         this.date = date;
         this.translateDate();
       });
+
+    this.user_detail = JSON.parse(window.localStorage.getItem('firebase:authUser:AIzaSyDRnt4FM3wfjsIW3_oLQJSSsxN5oFF9Xeg:[DEFAULT]'));
+    this.user_uid = this.user_detail.uid;
+
+    this.diarys = JSON.parse(window.localStorage.getItem('diarys'));
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad DetailPage');
+    // TODO: diary item update, including title and content
+    if (this.item) {
+      let article_content = document.getElementById('content');
+      article_content.innerText = this.text.content;
+      this.text.title = 'abc';
+    }
   }
 
   chooseImage() {
@@ -136,10 +162,28 @@ export class DetailPage {
     this.dateContain.minutes = array[1];
     console.log('view will leave: ', this.dateContain);
     console.log('view will leave: ', this.event.timeStarts.split(':')[1]);
+
+    // get text content
+    let article_content = document.getElementById('content');
+    this.text.content = article_content.outerText;
+    console.log('text: ', this.text.content);
   }
 
   ionViewDidLeave() {
     console.log('view did leave: ', this.event.timeStarts);
+    // TODO: for diary item
+    if (this.item) {
+
+    } else {
+      const database_diarys = this.angfire.database.object('users/' + this.user_uid + '/diarys');
+      let temp_for_diary = {
+        date: this.dateContain,
+        text_title: this.text.title,
+        text_content: this.text.content
+      }
+      this.diarys.push(temp_for_diary);
+      database_diarys.set(this.diarys)
+    }
   }
 
   ionViewWillUnload() {
