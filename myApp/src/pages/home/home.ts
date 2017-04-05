@@ -1,6 +1,6 @@
 import { Component } from '@angular/core'
 import { NavController, ToastController } from 'ionic-angular';
-import { AngularFire, FirebaseListObservable } from 'angularfire2';
+import { AngularFire } from 'angularfire2';
 
 // pages
 import { LoginPage } from '../login/login';
@@ -15,12 +15,20 @@ import { AuthService } from '../../providers/auth-service';
 })
 export class HomePage {
     user_detail: any;
+    user_uid: any;
     user: any;
-    items: FirebaseListObservable<any>;
+    myColor: string = "primary";
+    // for items
+    diarys_array: any[] = [];
+    diarys_array_item: any = {
+        month: "",
+        diarys: []
+    }
+    diarys_help: any = {};
+    diarys: any[] = [];
     items1: string[] = ['item1 child1', 'item1 child2', 'item1 child3'];
     items2: string[] = ['item2 child1', 'item2 child2', 'item2 child3'];
     items3: string[] = ['item3 child1', 'item3 child2', 'item3 child3'];
-    myColor: string = "primary";
 
     constructor(public navCtrl: NavController, public angfire: AngularFire, private authservice: AuthService,
         public toastCtrl: ToastController) {
@@ -30,6 +38,33 @@ export class HomePage {
             this.navCtrl.push(LoginPage)
         }
         this.user = window.localStorage.getItem('currentuser');
+        this.user_detail = JSON.parse(window.localStorage.getItem('firebase:authUser:AIzaSyDRnt4FM3wfjsIW3_oLQJSSsxN5oFF9Xeg:[DEFAULT]'));
+        this.user_uid = this.user_detail.uid;
+        // get diarys real time
+        const database_diarys = this.angfire.database.object('users/' + this.user_uid + '/diarys');
+        database_diarys.subscribe(response => {
+            this.diarys = [];
+            this.diarys_array = [];
+            this.diarys_help = {};
+            for (let i of response) {
+                this.diarys.push(i);
+            }
+            for (let i of this.diarys) {
+                if (this.diarys_help[i.date.year + i.date.month] == undefined) {
+                    this.diarys_help[i.date.year + i.date.month] = [];
+                }
+                this.diarys_help[i.date.year + i.date.month].push(i);
+            }
+            let key_list = Object.keys(this.diarys_help);
+            for (let i of key_list) {
+                this.diarys_array_item = {
+                    month: i,
+                    diarys: this.diarys_help[i]
+                }
+                this.diarys_array.push(this.diarys_array_item);
+            }
+            console.log('this.diarys_help: ', this.diarys_array);
+        });
     }
 
     show() {

@@ -23,7 +23,7 @@ export class DetailPage {
   user_uid: any;
   user_detail: any;
   // date
-  item: string;
+  item: any;
   date: Date;
   dateContain = {
     date: "",
@@ -60,7 +60,11 @@ export class DetailPage {
     // TODO: initalize date for diary item
     if (this.item) {
       this.date = new Date();
-      this.date.setDate(2);
+      this.date.setDate(Number(this.item.date.date));
+      this.date.setFullYear(Number(this.item.date.year));
+      this.date.setMonth(Number(this.switch_month_to_number(this.item.date.month)));
+      this.date.setHours(Number(this.item.date.hours));
+      this.date.setMinutes(Number(this.item.date.minutes));
     } else {
       this.date = new Date();
     }
@@ -84,8 +88,8 @@ export class DetailPage {
     // TODO: diary item update, including title and content
     if (this.item) {
       let article_content = document.getElementById('content');
-      article_content.innerText = this.text.content;
-      this.text.title = 'abc';
+      article_content.innerText = this.item.text_content;
+      this.text.title = this.item.text_title;
     }
   }
 
@@ -154,6 +158,15 @@ export class DetailPage {
     console.log('minute: ', this.date.getMinutes());
     console.log('second: ', this.date.getSeconds());
     console.log('time: ', this.date.getTime());
+  }
+
+  switch_month_to_number(month: string) {
+    for (let i of this.monthNames) {
+      if (i == month) {
+        return this.monthNames.indexOf(i);
+      }
+    }
+    return 0;
   }
 
   ionViewWillLeave() {
