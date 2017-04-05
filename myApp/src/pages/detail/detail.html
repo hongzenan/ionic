@@ -60,11 +60,17 @@
   </div>
 
   <div class="tag-wrap">
-    <div class="tag-tags">
-      <ion-icon name="pricetag"></ion-icon>
+    <div>
+      <button class="tag-tags" (click)="setTag()">
+        <ion-icon name="pricetag"></ion-icon>
+        <span>{{ tag }}</span>
+      </button>
     </div>
-    <div class="tag-locate">
-      <ion-icon name="pin"></ion-icon>
+    <div>
+      <button class="tag-locate" (click)="setGeolocation()">
+        <ion-icon name="pin"></ion-icon>
+        <span>{{ location }}</span>
+      </button>
     </div>
   </div>
 </ion-content>

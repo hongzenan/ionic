@@ -26,9 +26,6 @@ export class HomePage {
     }
     diarys_help: any = {};
     diarys: any[] = [];
-    items1: string[] = ['item1 child1', 'item1 child2', 'item1 child3'];
-    items2: string[] = ['item2 child1', 'item2 child2', 'item2 child3'];
-    items3: string[] = ['item3 child1', 'item3 child2', 'item3 child3'];
 
     constructor(public navCtrl: NavController, public angfire: AngularFire, private authservice: AuthService,
         public toastCtrl: ToastController) {

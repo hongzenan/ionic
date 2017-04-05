@@ -24,12 +24,12 @@ export class MyApp {
   myInput: string = "";
   // for toggle items
   toggleDate: boolean = false;
-  toggleItem1: boolean = false;
-  toggleItem2: boolean = false;
+  toggleTags: boolean = false;
+  toggleLocates: boolean = false;
   addTagItem: string;
   addLocateItem: string;
-  items1: string[] = [];
-  items2: string[] = [];
+  tags: string[] = [];
+  locates: string[] = [];
   diarys: any[] = [];
 
 
@@ -51,19 +51,21 @@ export class MyApp {
     const database_tags = this.angfire.database.object('users/' + this.user_uid + '/tags');
     database_tags.subscribe(response => {
       console.log('tag in constructure: ', response);
-      this.items1 = [];
+      this.tags = [];
       for (let i of response) {
-        this.items1.push(i);
+        this.tags.push(i);
       }
+      window.localStorage.setItem('tags', JSON.stringify(this.tags));
     });
     // get locate from firebase
     const database_locates = this.angfire.database.object('users/' + this.user_uid + '/locates');
     database_locates.subscribe(response => {
       console.log('locate in constructure: ', response);
-      this.items2 = [];
+      this.locates = [];
       for (let i of response) {
-        this.items2.push(i);
+        this.locates.push(i);
       }
+      window.localStorage.setItem('locates', JSON.stringify(this.locates));
     });
     // get diarys from firebase
     const database_diarys = this.angfire.database.object('users/' + this.user_uid + '/diarys');
@@ -90,8 +92,8 @@ export class MyApp {
     console.log("onCancel: ", $event);
   }
 
-  toggleForItem1() {
-    this.toggleItem1 = !this.toggleItem1;
+  toggleForTags() {
+    this.toggleTags = !this.toggleTags;
   }
 
   addTag() {
@@ -115,11 +117,11 @@ export class MyApp {
           text: 'Save',
           handler: data => {
             this.addTagItem = data.tag;
-            this.items1.push(this.addTagItem);
+            this.tags.push(this.addTagItem);
             console.log("data: ", data.tag);
             const database_tags = this.angfire.database.object('users/' + this.user_uid + '/tags');
-            database_tags.set(this.items1);
-            console.log("dada: ", this.items1);
+            database_tags.set(this.tags);
+            console.log("dada: ", this.tags);
           }
         }
       ]
@@ -129,14 +131,14 @@ export class MyApp {
   }
 
   deleteTag(item) {
-    let index = this.items1.indexOf(item);
+    let index = this.tags.indexOf(item);
     if (index > -1) {
       console.log('index: ', index);
-      this.items1.splice(index, 1);
-      console.log('the last item: ', this.items1);
+      this.tags.splice(index, 1);
+      console.log('the last item: ', this.tags);
     }
     const database_tags = this.angfire.database.object('users/' + this.user_uid + '/tags');
-    database_tags.set(this.items1);
+    database_tags.set(this.tags);
   }
 
   addLocate() {
@@ -161,10 +163,10 @@ export class MyApp {
           handler: data => {
             this.addLocateItem = data.locate;
             console.log('locate: ', data);
-            this.items2.push(this.addLocateItem);
+            this.locates.push(this.addLocateItem);
             const database_locates = this.angfire.database.object('users/' + this.user_uid + '/locates');
-            database_locates.set(this.items2);
-            console.log('this item2: ', this.items2);
+            database_locates.set(this.locates);
+            console.log('this item2: ', this.locates);
           }
         }
       ]
@@ -174,16 +176,16 @@ export class MyApp {
   }
 
   deleteLocate(item) {
-    let index = this.items2.indexOf(item);
+    let index = this.locates.indexOf(item);
     if (index > -1) {
-      this.items2.splice(index, 1);
+      this.locates.splice(index, 1);
     }
     const database_locates = this.angfire.database.object('users/' + this.user_uid + '/locates');
-    database_locates.set(this.items2);
+    database_locates.set(this.locates);
   }
 
-  toggleForItem2() {
-    this.toggleItem2 = !this.toggleItem2;
+  toggleForLocates() {
+    this.toggleLocates = !this.toggleLocates;
   }
 
   toggleForDate() {

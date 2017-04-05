@@ -31,20 +31,20 @@
         <ion-calendar></ion-calendar>
       </div>
 
-      <button ion-item class="item-background" (click)="toggleForItem1()">
-        item1
+      <button ion-item class="item-background" (click)="toggleForTags()">
+        tags
       </button>
-      <ion-list *ngIf="toggleItem1">
-        <button ion-item *ngFor="let item of items1" (click)="deleteTag(item)">{{item}} is good</button>
+      <ion-list *ngIf="toggleTags">
+        <button ion-item *ngFor="let item of tags" (click)="deleteTag(item)">{{item}} is good</button>
         <button ion-item (click)="addTag()">
           <ion-icon style="padding-left: 110px" name="add"></ion-icon>
         </button>
       </ion-list>
-      <button ion-item class="item-background" (click)="toggleForItem2()">
-        item2
+      <button ion-item class="item-background" (click)="toggleForLocates()">
+        locates
       </button>
-      <ion-list *ngIf="toggleItem2">
-        <button ion-item *ngFor="let item of items2" (click)="deleteLocate(item)">{{item}} is bad</button>
+      <ion-list *ngIf="toggleLocates">
+        <button ion-item *ngFor="let item of locates" (click)="deleteLocate(item)">{{item}} is bad</button>
         <button ion-item (click)="addLocate()">
           <ion-icon style="padding-left: 110px" name="add"></ion-icon>
         </button>

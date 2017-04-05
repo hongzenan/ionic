@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, ActionSheetController } from 'ionic-angular';
+import { NavController, NavParams, ActionSheetController, AlertController } from 'ionic-angular';
 
 import { ImagesPage } from '../images/images';
 import { ImageDetailPage } from '../image-detail/image-detail';
 import { DatePicker } from 'ionic2-date-picker/ionic2-date-picker';
 
 import { AngularFire } from 'angularfire2';
+import { Geolocation } from '@ionic-native/geolocation';
+import { Http } from '@angular/http';
 
 /*
   Generated class for the Detail page.
@@ -31,8 +33,7 @@ export class DetailPage {
     year: "",
     month: "",
     hours: "",
-    minutes: "",
-    seconds: ""
+    minutes: ""
   }
   monthNames = [
     "一月", "二月", "三月",
@@ -51,14 +52,31 @@ export class DetailPage {
     content: 'aa'
   }
   diarys: any[] = [];
+  locates: string[] = [];
+  tags: string[] = [];
+  RadioLocationOpen: boolean;
+  location = "";
+  RadioTagOpen: boolean;
+  tag = "";
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
     public actionCtrl: ActionSheetController, public datePicker: DatePicker,
-    public angfire: AngularFire) {
+    public angfire: AngularFire, public geolocation: Geolocation, public http: Http,
+    public alertCtrl: AlertController) {
     this.item = this.navParams.get("item");
     console.log("detail page: ", this.item);
     // TODO: initalize date for diary item
+    this.diarys = JSON.parse(window.localStorage.getItem('diarys'));
+
     if (this.item) {
+      this.location = this.item.location;
+      this.tag = this.item.tag;
+      for (let i of this.diarys) {
+        if (i.text_title == this.item.text_title && i.text_content == this.item.text_content &&
+          (i.text_title != null || i.text_content != null)) {
+          this.diarys.splice(this.diarys.indexOf(i), 1);
+        }
+      }
       this.date = new Date();
       this.date.setDate(Number(this.item.date.date));
       this.date.setFullYear(Number(this.item.date.year));
@@ -80,7 +98,13 @@ export class DetailPage {
     this.user_detail = JSON.parse(window.localStorage.getItem('firebase:authUser:AIzaSyDRnt4FM3wfjsIW3_oLQJSSsxN5oFF9Xeg:[DEFAULT]'));
     this.user_uid = this.user_detail.uid;
 
-    this.diarys = JSON.parse(window.localStorage.getItem('diarys'));
+    // get geolocation
+    this.getGeolocation();
+
+    this.locates = JSON.parse(window.localStorage.getItem('locates'));
+    this.tags = JSON.parse(window.localStorage.getItem('tags'));
+    console.log('locates: ', this.locates);
+    console.log('tags: ', this.tags);
   }
 
   ionViewDidLoad() {
@@ -169,6 +193,80 @@ export class DetailPage {
     return 0;
   }
 
+  getGeolocation() {
+    this.geolocation.getCurrentPosition().then(response => {
+      console.log('location: ', response);
+
+      let url = "http://maps.google.com/maps/api/geocode/json?latlng=" + response.coords.latitude + "," + response.coords.longitude + "&language=zh-CN&sensor=false";
+      this.http.get(url).subscribe(res => {
+        console.log('results: ', res.json().results[0]);
+        let res_address_body = res.json().results[0].address_components;
+        let length_address_array = res_address_body.length;
+        let address = "";
+        for (let i = length_address_array - 2; i >= 0; i -= 1) {
+          address += res_address_body[i].long_name;
+        }
+        if (!this.location) {
+          this.location = address;
+        }
+        if (this.locates.indexOf(address) < 0) {
+          this.locates.push(address);
+          const database_locates = this.angfire.database.object('users/' + this.user_uid + '/locates');
+          database_locates.set(this.locates);
+        }
+        console.log('address: ', address);
+      });
+    });
+  }
+
+  setGeolocation() {
+    let alert = this.alertCtrl.create();
+    alert.setTitle('选择地址');
+    for (let i of this.locates) {
+      alert.addInput({
+        type: 'radio',
+        label: i,
+        value: i
+      });
+    }
+    alert.addButton('Cancel');
+    alert.addButton({
+      text: 'OK',
+      handler: data => {
+        console.log('alert location data: ', data);
+        this.RadioLocationOpen = false;
+        this.location = data;
+      }
+    });
+    alert.present().then(() => {
+      this.RadioLocationOpen = true;
+    });
+  }
+
+  setTag() {
+    let alert = this.alertCtrl.create();
+    alert.setTitle('选择标签');
+    for (let i of this.tags) {
+      alert.addInput({
+        type: 'radio',
+        label: i,
+        value: i
+      });
+    }
+    alert.addButton('Cancel');
+    alert.addButton({
+      text: 'OK',
+      handler: data => {
+        console.log('alert tag data: ', data);
+        this.RadioTagOpen = false;
+        this.tag = data;
+      }
+    });
+    alert.present().then(() => {
+      this.RadioTagOpen = true;
+    });
+  }
+
   ionViewWillLeave() {
     let array = this.event.timeStarts.split(':');
     this.dateContain.hours = array[0];
@@ -185,18 +283,16 @@ export class DetailPage {
   ionViewDidLeave() {
     console.log('view did leave: ', this.event.timeStarts);
     // TODO: for diary item
-    if (this.item) {
-
-    } else {
-      const database_diarys = this.angfire.database.object('users/' + this.user_uid + '/diarys');
-      let temp_for_diary = {
-        date: this.dateContain,
-        text_title: this.text.title,
-        text_content: this.text.content
-      }
-      this.diarys.push(temp_for_diary);
-      database_diarys.set(this.diarys)
+    const database_diarys = this.angfire.database.object('users/' + this.user_uid + '/diarys');
+    let temp_for_diary = {
+      date: this.dateContain,
+      text_title: this.text.title,
+      text_content: this.text.content,
+      location: this.location,
+      tag: this.tag
     }
+    this.diarys.push(temp_for_diary);
+    database_diarys.set(this.diarys)
   }
 
   ionViewWillUnload() {

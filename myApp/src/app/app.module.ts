@@ -1,6 +1,8 @@
 import { NgModule, ErrorHandler } from '@angular/core';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
+import { Geolocation } from '@ionic-native/geolocation';
+import { HttpModule } from '@angular/http';
 
 // Import the AF2 Module
 import { AngularFireModule } from 'angularfire2';
@@ -63,7 +65,9 @@ const config = {
     {
       provide: ErrorHandler,
       useClass: IonicErrorHandler
-    }
+    },
+    Geolocation,
+    HttpModule
   ]
 })
 export class AppModule { }
