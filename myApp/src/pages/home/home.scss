@@ -1,4 +1,18 @@
 page-home {
+   ::-webkit-scrollbar {
+    width: 0px;
+  }
+   ::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  }
+   ::-webkit-scrollbar-thumb {
+    background-color: darkgrey;
+    outline: 1px solid slategrey;
+  }
+   ::-webkit-scrollbar-track-piece {
+    background-color: #ffffff;
+    -webkit-border-radius: 3px;
+  }
   .scroll-content {
     overflow-y: auto;
   }
