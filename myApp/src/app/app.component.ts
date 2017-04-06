@@ -50,7 +50,6 @@ export class MyApp {
     //get tags from firebase
     const database_tags = this.angfire.database.object('users/' + this.user_uid + '/tags');
     database_tags.subscribe(response => {
-      console.log('tag in constructure: ', response);
       this.tags = [];
       for (let i of response) {
         this.tags.push(i);
@@ -60,7 +59,6 @@ export class MyApp {
     // get locate from firebase
     const database_locates = this.angfire.database.object('users/' + this.user_uid + '/locates');
     database_locates.subscribe(response => {
-      console.log('locate in constructure: ', response);
       this.locates = [];
       for (let i of response) {
         this.locates.push(i);
@@ -70,7 +68,6 @@ export class MyApp {
     // get diarys from firebase
     const database_diarys = this.angfire.database.object('users/' + this.user_uid + '/diarys');
     database_diarys.subscribe(response => {
-      console.log('diary in constructure: ', response);
       this.diarys = [];
       for (let i of response) {
         this.diarys.push(i);
@@ -85,11 +82,9 @@ export class MyApp {
   }
 
   onInput($event) {
-    console.log("onInput: ", $event);
   }
 
   onCancel($event) {
-    console.log("onCancel: ", $event);
   }
 
   toggleForTags() {
@@ -108,20 +103,15 @@ export class MyApp {
       ],
       buttons: [
         {
-          text: 'Cancel',
-          handler: data => {
-            console.log('Cancel clicked');
-          }
+          text: 'Cancel'
         },
         {
           text: 'Save',
           handler: data => {
             this.addTagItem = data.tag;
             this.tags.push(this.addTagItem);
-            console.log("data: ", data.tag);
             const database_tags = this.angfire.database.object('users/' + this.user_uid + '/tags');
             database_tags.set(this.tags);
-            console.log("dada: ", this.tags);
           }
         }
       ]
@@ -133,9 +123,7 @@ export class MyApp {
   deleteTag(item) {
     let index = this.tags.indexOf(item);
     if (index > -1) {
-      console.log('index: ', index);
       this.tags.splice(index, 1);
-      console.log('the last item: ', this.tags);
     }
     const database_tags = this.angfire.database.object('users/' + this.user_uid + '/tags');
     database_tags.set(this.tags);
@@ -153,20 +141,15 @@ export class MyApp {
       ],
       buttons: [
         {
-          text: 'Cancel',
-          handler: data => {
-            console.log('add locate: ', data.locate);
-          }
+          text: 'Cancel'
         },
         {
           text: 'Save',
           handler: data => {
             this.addLocateItem = data.locate;
-            console.log('locate: ', data);
             this.locates.push(this.addLocateItem);
             const database_locates = this.angfire.database.object('users/' + this.user_uid + '/locates');
             database_locates.set(this.locates);
-            console.log('this item2: ', this.locates);
           }
         }
       ]
@@ -191,7 +174,4 @@ export class MyApp {
   toggleForDate() {
     this.toggleDate = !this.toggleDate;
   }
-
-  // for calendar
-
 }

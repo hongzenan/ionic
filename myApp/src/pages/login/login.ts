@@ -21,7 +21,6 @@ export class LoginPage {
   constructor(public navCtrl: NavController, public navParams: NavParams, public authservice: AuthService) { }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad LoginPage');
   }
 
   login() {

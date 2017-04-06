@@ -32,7 +32,6 @@ export class AuthService {
         provider: AuthProviders.Password,
         method: AuthMethods.Password
       }).then((response) => {
-        console.log('Logged in success' + JSON.stringify(response));
         let currentuser = {
           email: response.auth.email,
           picture: response.auth.photoURL
@@ -40,7 +39,6 @@ export class AuthService {
         window.localStorage.setItem('currentuser', JSON.stringify(currentuser));
         return response;
       }).catch((error) => {
-        console.log("auth login ", error);
       });
   }
 
@@ -49,7 +47,6 @@ export class AuthService {
       email, password
     })
       .then((user) => {
-        console.log('Create User Success', user);
         return user;
       })
       .catch((error) => console.log('Create User Failure', error));
@@ -58,7 +55,6 @@ export class AuthService {
   signOut(): firebase.Promise<void> {
     return this.angfire.auth.logout()
       .then((response) => {
-        console.log('Log Out Success ', response);
         window.localStorage.removeItem('currentuser');
       })
       .catch((error) => console.log('Log Out Failure ', error))

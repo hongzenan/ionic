@@ -44,7 +44,7 @@ export class DetailPage {
   weekDayNames = [
     "星期天", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"
   ]
-  public event = {
+  event = {
     timeStarts: ''
   }
   text = {
@@ -64,8 +64,6 @@ export class DetailPage {
     public angfire: AngularFire, public geolocation: Geolocation, public http: Http,
     public alertCtrl: AlertController) {
     this.item = this.navParams.get("item");
-    console.log("detail page: ", this.item);
-    // TODO: initalize date for diary item
     this.diarys = JSON.parse(window.localStorage.getItem('diarys'));
 
     if (this.item) {
@@ -103,13 +101,9 @@ export class DetailPage {
 
     this.locates = JSON.parse(window.localStorage.getItem('locates'));
     this.tags = JSON.parse(window.localStorage.getItem('tags'));
-    console.log('locates: ', this.locates);
-    console.log('tags: ', this.tags);
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad DetailPage');
-    // TODO: diary item update, including title and content
     if (this.item) {
       let article_content = document.getElementById('content');
       article_content.innerText = this.item.text_content;
@@ -164,24 +158,18 @@ export class DetailPage {
     this.dateContain.day = this.weekDayNames[this.date.getDay()];
     this.dateContain.month = this.monthNames[this.date.getMonth()];
     this.dateContain.year = this.date.getFullYear().toString();
-    console.log('date: ', this.date);
-    console.log('full year: ', this.date.getFullYear());
-    console.log('month: ', this.date.getMonth());
-    console.log('weekDays: ', this.weekDayNames[this.date.getDay()]);
-    console.log('monthNames: ', this.monthNames[this.date.getMonth()]);
   }
 
   translateTime() {
     this.dateContain.hours = this.date.getHours().toString();
     this.dateContain.minutes = this.date.getMinutes().toString();
+    if (this.date.getHours() < 10) {
+      this.dateContain.hours = "0" + this.dateContain.hours;
+    }
     if (this.date.getMinutes() < 10) {
       this.dateContain.minutes = "0" + this.dateContain.minutes;
     }
     this.event.timeStarts = this.dateContain.hours + ":" + this.dateContain.minutes;
-    console.log('hour: ', this.date.getHours());
-    console.log('minute: ', this.date.getMinutes());
-    console.log('second: ', this.date.getSeconds());
-    console.log('time: ', this.date.getTime());
   }
 
   switch_month_to_number(month: string) {
@@ -195,11 +183,9 @@ export class DetailPage {
 
   getGeolocation() {
     this.geolocation.getCurrentPosition().then(response => {
-      console.log('location: ', response);
 
       let url = "http://maps.google.com/maps/api/geocode/json?latlng=" + response.coords.latitude + "," + response.coords.longitude + "&language=zh-CN&sensor=false";
       this.http.get(url).subscribe(res => {
-        console.log('results: ', res.json().results[0]);
         let res_address_body = res.json().results[0].address_components;
         let length_address_array = res_address_body.length;
         let address = "";
@@ -214,7 +200,6 @@ export class DetailPage {
           const database_locates = this.angfire.database.object('users/' + this.user_uid + '/locates');
           database_locates.set(this.locates);
         }
-        console.log('address: ', address);
       });
     });
   }
@@ -233,7 +218,6 @@ export class DetailPage {
     alert.addButton({
       text: 'OK',
       handler: data => {
-        console.log('alert location data: ', data);
         this.RadioLocationOpen = false;
         this.location = data;
       }
@@ -257,7 +241,6 @@ export class DetailPage {
     alert.addButton({
       text: 'OK',
       handler: data => {
-        console.log('alert tag data: ', data);
         this.RadioTagOpen = false;
         this.tag = data;
       }
@@ -271,18 +254,13 @@ export class DetailPage {
     let array = this.event.timeStarts.split(':');
     this.dateContain.hours = array[0];
     this.dateContain.minutes = array[1];
-    console.log('view will leave: ', this.dateContain);
-    console.log('view will leave: ', this.event.timeStarts.split(':')[1]);
 
     // get text content
     let article_content = document.getElementById('content');
     this.text.content = article_content.outerText;
-    console.log('text: ', this.text.content);
   }
 
   ionViewDidLeave() {
-    console.log('view did leave: ', this.event.timeStarts);
-    // TODO: for diary item
     const database_diarys = this.angfire.database.object('users/' + this.user_uid + '/diarys');
     let temp_for_diary = {
       date: this.dateContain,
@@ -296,10 +274,8 @@ export class DetailPage {
   }
 
   ionViewWillUnload() {
-    console.log('view will unload: ', this.event.timeStarts);
   }
 
   ionViewDidUnload() {
-    console.log('view did unload: ', this.event.timeStarts);
   }
 }
