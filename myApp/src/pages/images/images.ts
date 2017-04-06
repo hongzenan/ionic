@@ -13,10 +13,9 @@ import { NavController, NavParams } from 'ionic-angular';
 })
 export class ImagesPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {}
+  constructor(public navCtrl: NavController, public navParams: NavParams) { }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad ImagesPage');
   }
 
 }

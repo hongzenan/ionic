@@ -26,12 +26,17 @@ export class HomePage {
     }
     diarys_help: any = {};
     diarys: any[] = [];
+    monthNames = [
+        "一月", "二月", "三月",
+        "四月", "五月", "六月", "七月",
+        "八月", "九月", "十月",
+        "十一月", "十二月"
+    ]
 
     constructor(public navCtrl: NavController, public angfire: AngularFire, private authservice: AuthService,
         public toastCtrl: ToastController) {
         this.user = "";
         if (!this.isLoggedin()) {
-            console.log("You are not logged in")
             this.navCtrl.push(LoginPage)
         }
         this.user = window.localStorage.getItem('currentuser');
@@ -40,6 +45,8 @@ export class HomePage {
         // get diarys real time
         const database_diarys = this.angfire.database.object('users/' + this.user_uid + '/diarys');
         database_diarys.subscribe(response => {
+            let response_help = [];
+            response_help = this.order_diarys(response);
             this.diarys = [];
             this.diarys_array = [];
             this.diarys_help = {};
@@ -60,7 +67,6 @@ export class HomePage {
                 }
                 this.diarys_array.push(this.diarys_array_item);
             }
-            console.log('this.diarys_help: ', this.diarys_array);
         });
     }
 
@@ -72,9 +78,7 @@ export class HomePage {
         this.user_detail = JSON.parse(window.localStorage.getItem('firebase:authUser:AIzaSyDRnt4FM3wfjsIW3_oLQJSSsxN5oFF9Xeg:[DEFAULT]'));
         let user_uid = this.user_detail.uid;
         const user_database_point = this.angfire.database.object('users/' + user_uid);
-        console.log("a: ", user_database_point);
         user_database_point.subscribe(response => {
-            console.log("resp: ", response);
         })
         user_database_point.set({ name1: "kane1" });
     }
@@ -95,9 +99,44 @@ export class HomePage {
     }
 
     goToDetail(item) {
-        console.log("item: ", item);
         this.navCtrl.push(DetailPage, {
             "item": item
         });
+    }
+
+    // sort by date
+    order_diarys(response) {
+        response.sort((a, b) => {
+            return this.order_help(b.date.year, b.date.month, b.date.date, b.date.hours, b.date.minutes) -
+                this.order_help(a.date.year, a.date.month, a.date.date, a.date.hours, a.date.minutes);
+        });
+        return response;
+    }
+
+    order_help(year: string, month: string, date: string, hours: string, minutes: string) {
+        if (date.length == 1) {
+            date = '0' + date;
+        }
+        month = this.switch_month_to_number(month).toString();
+        if (month.length == 1) {
+            month = '0' + month;
+        }
+        if (hours.length == 1) {
+            hours = '0' + hours;
+        }
+        if (minutes.length == 1) {
+            minutes = '0' + minutes;
+        }
+        let result = year + month + date + hours + minutes;
+        return Number(result);
+    }
+
+    switch_month_to_number(month: string) {
+        for (let i of this.monthNames) {
+            if (i == month) {
+                return this.monthNames.indexOf(i);
+            }
+        }
+        return 0;
     }
 }
