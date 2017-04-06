@@ -56,6 +56,9 @@ export class AuthService {
     return this.angfire.auth.logout()
       .then((response) => {
         window.localStorage.removeItem('currentuser');
+        window.localStorage.removeItem('tags');
+        window.localStorage.removeItem('locates');
+        window.localStorage.removeItem('diarys');
       })
       .catch((error) => console.log('Log Out Failure ', error))
   }

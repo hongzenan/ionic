@@ -44,7 +44,7 @@
         <variable name="APP_ID" value="156155484902545" />
         <variable name="APP_NAME" value="ionic2" />
     </plugin>
-    <plugin name="cordova-plugin-geolocation" spec="~2.4.2">
-        <variable name="GEOLOCATION_USAGE_DESCRIPTION" value=" " />
-    </plugin>
+    <plugin name="cordova-plugin-file" spec="~4.3.2" />
+    <plugin name="cordova-plugin-filepath" spec="~1.0.2" />
+    <plugin name="com.megster.cordova.FileChooser" spec="http://github.com/don/cordova-filechooser.git" />
 </widget>

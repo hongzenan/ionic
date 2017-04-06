@@ -1,7 +1,6 @@
 import { NgModule, ErrorHandler } from '@angular/core';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
-import { Geolocation } from '@ionic-native/geolocation';
 import { HttpModule } from '@angular/http';
 
 // Import the AF2 Module
@@ -62,11 +61,10 @@ const config = {
   ],
   providers: [
     AuthService,
-    {
-      provide: ErrorHandler,
-      useClass: IonicErrorHandler
-    },
-    Geolocation,
+    // {
+    //   provide: ErrorHandler,
+    //   useClass: IonicErrorHandler
+    // },
     HttpModule
   ]
 })

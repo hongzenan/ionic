@@ -38,36 +38,38 @@ export class HomePage {
         this.user = "";
         if (!this.isLoggedin()) {
             this.navCtrl.push(LoginPage)
+        } else {
+            this.user = window.localStorage.getItem('currentuser');
+            this.user_detail = JSON.parse(window.localStorage.getItem('firebase:authUser:AIzaSyDRnt4FM3wfjsIW3_oLQJSSsxN5oFF9Xeg:[DEFAULT]'));
+            this.user_uid = this.user_detail.uid;
+            // get diarys real time
+            const database_diarys = this.angfire.database.object('users/' + this.user_uid + '/diarys');
+            database_diarys.subscribe(response => {
+                if (response.length > 1) {
+                    this.order_diarys(response);
+                }
+                this.diarys = [];
+                this.diarys_array = [];
+                this.diarys_help = {};
+                for (let i of response) {
+                    this.diarys.push(i);
+                }
+                for (let i of this.diarys) {
+                    if (this.diarys_help[i.date.year + i.date.month] == undefined) {
+                        this.diarys_help[i.date.year + i.date.month] = [];
+                    }
+                    this.diarys_help[i.date.year + i.date.month].push(i);
+                }
+                let key_list = Object.keys(this.diarys_help);
+                for (let i of key_list) {
+                    this.diarys_array_item = {
+                        month: i,
+                        diarys: this.diarys_help[i]
+                    }
+                    this.diarys_array.push(this.diarys_array_item);
+                }
+            });
         }
-        this.user = window.localStorage.getItem('currentuser');
-        this.user_detail = JSON.parse(window.localStorage.getItem('firebase:authUser:AIzaSyDRnt4FM3wfjsIW3_oLQJSSsxN5oFF9Xeg:[DEFAULT]'));
-        this.user_uid = this.user_detail.uid;
-        // get diarys real time
-        const database_diarys = this.angfire.database.object('users/' + this.user_uid + '/diarys');
-        database_diarys.subscribe(response => {
-            let response_help = [];
-            response_help = this.order_diarys(response);
-            this.diarys = [];
-            this.diarys_array = [];
-            this.diarys_help = {};
-            for (let i of response) {
-                this.diarys.push(i);
-            }
-            for (let i of this.diarys) {
-                if (this.diarys_help[i.date.year + i.date.month] == undefined) {
-                    this.diarys_help[i.date.year + i.date.month] = [];
-                }
-                this.diarys_help[i.date.year + i.date.month].push(i);
-            }
-            let key_list = Object.keys(this.diarys_help);
-            for (let i of key_list) {
-                this.diarys_array_item = {
-                    month: i,
-                    diarys: this.diarys_help[i]
-                }
-                this.diarys_array.push(this.diarys_array_item);
-            }
-        });
     }
 
     show() {

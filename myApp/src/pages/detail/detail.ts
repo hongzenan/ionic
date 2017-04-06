@@ -6,8 +6,9 @@ import { ImageDetailPage } from '../image-detail/image-detail';
 import { DatePicker } from 'ionic2-date-picker/ionic2-date-picker';
 
 import { AngularFire } from 'angularfire2';
-import { Geolocation } from '@ionic-native/geolocation';
 import { Http } from '@angular/http';
+import { FileChooser, FilePath, File } from 'ionic-native';
+import firebase from 'firebase';
 
 /*
   Generated class for the Detail page.
@@ -59,12 +60,15 @@ export class DetailPage {
   RadioTagOpen: boolean;
   tag = "";
 
+  nativepath: any;
+  firestore = firebase.storage();
+
   constructor(public navCtrl: NavController, public navParams: NavParams,
     public actionCtrl: ActionSheetController, public datePicker: DatePicker,
-    public angfire: AngularFire, public geolocation: Geolocation, public http: Http,
+    public angfire: AngularFire, public http: Http,
     public alertCtrl: AlertController) {
     this.item = this.navParams.get("item");
-    this.diarys = JSON.parse(window.localStorage.getItem('diarys'));
+    this.diarys = JSON.parse(window.localStorage.getItem('diarys')) || [];
 
     if (this.item) {
       this.location = this.item.location;
@@ -99,8 +103,8 @@ export class DetailPage {
     // get geolocation
     this.getGeolocation();
 
-    this.locates = JSON.parse(window.localStorage.getItem('locates'));
-    this.tags = JSON.parse(window.localStorage.getItem('tags'));
+    this.locates = JSON.parse(window.localStorage.getItem('locates')) || [];
+    this.tags = JSON.parse(window.localStorage.getItem('tags')) || [];
   }
 
   ionViewDidLoad() {
@@ -120,6 +124,12 @@ export class DetailPage {
           role: 'destructive',
           handler: () => {
             console.log('Destructive clicked');
+            FileChooser.open().then((url) => {
+              (<any>window).FilePath.resolveNativePath(url, (result) => {
+                this.nativepath = result;
+                this.uploadimages();
+              });
+            });
           }
         },
         {
@@ -139,6 +149,24 @@ export class DetailPage {
     });
 
     actionSheet.present();
+  }
+
+  uploadimages() {
+    (<any>window).resolveLocalFileSystemURL(this.nativepath, (res) => {
+      res.file((resFile) => {
+        let reader = new FileReader();
+        reader.readAsArrayBuffer(resFile);
+        reader.onloadend = (evt: any) => {
+          let imgBlob = new Blob([evt.target.result], { type: 'image/jpeg' });
+          let imageStore = this.firestore.ref().child('image');
+          imageStore.put(imgBlob).then((res) => {
+            alert('Upload Success');
+          }).catch((err) => {
+            alert('Upload Failed');
+          });
+        }
+      });
+    });
   }
 
   goToImages() {
@@ -182,9 +210,8 @@ export class DetailPage {
   }
 
   getGeolocation() {
-    this.geolocation.getCurrentPosition().then(response => {
-
-      let url = "http://maps.google.com/maps/api/geocode/json?latlng=" + response.coords.latitude + "," + response.coords.longitude + "&language=zh-CN&sensor=false";
+    this.http.get('http://ipinfo.io/json').subscribe(response => {
+      let url = "http://maps.google.com/maps/api/geocode/json?latlng=" + response.json().loc + "&language=zh-CN&sensor=false";
       this.http.get(url).subscribe(res => {
         let res_address_body = res.json().results[0].address_components;
         let length_address_array = res_address_body.length;
@@ -195,11 +222,14 @@ export class DetailPage {
         if (!this.location) {
           this.location = address;
         }
-        if (this.locates.indexOf(address) < 0) {
+        if (this.locates != null && this.locates.indexOf(address) > -1) {
+        } else {
           this.locates.push(address);
           const database_locates = this.angfire.database.object('users/' + this.user_uid + '/locates');
           database_locates.set(this.locates);
         }
+      }, (err) => {
+        console.log('err: ', err);
       });
     });
   }
@@ -229,13 +259,17 @@ export class DetailPage {
 
   setTag() {
     let alert = this.alertCtrl.create();
-    alert.setTitle('选择标签');
-    for (let i of this.tags) {
-      alert.addInput({
-        type: 'radio',
-        label: i,
-        value: i
-      });
+    if (this.tags != null) {
+      alert.setTitle('选择标签');
+      for (let i of this.tags) {
+        alert.addInput({
+          type: 'radio',
+          label: i,
+          value: i
+        });
+      }
+    } else {
+      alert.setTitle('没有标签，请先添加');
     }
     alert.addButton('Cancel');
     alert.addButton({
