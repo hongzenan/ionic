@@ -19,6 +19,7 @@ import { IonCalendar } from '../components/ion-calendar/ion-calendar';
 import { AuthService } from '../providers/auth-service';
 
 import { DatePicker } from 'ionic2-date-picker/ionic2-date-picker';
+import { Geolocation } from '@ionic-native/geolocation';
 
 
 // Initialize Firebase
@@ -65,6 +66,7 @@ const config = {
     //   provide: ErrorHandler,
     //   useClass: IonicErrorHandler
     // },
+    Geolocation,
     HttpModule
   ]
 })

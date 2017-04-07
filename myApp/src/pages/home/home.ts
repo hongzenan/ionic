@@ -77,12 +77,12 @@ export class HomePage {
     }
 
     save() {
-        this.user_detail = JSON.parse(window.localStorage.getItem('firebase:authUser:AIzaSyDRnt4FM3wfjsIW3_oLQJSSsxN5oFF9Xeg:[DEFAULT]'));
-        let user_uid = this.user_detail.uid;
-        const user_database_point = this.angfire.database.object('users/' + user_uid);
-        user_database_point.subscribe(response => {
-        })
-        user_database_point.set({ name1: "kane1" });
+        // this.user_detail = JSON.parse(window.localStorage.getItem('firebase:authUser:AIzaSyDRnt4FM3wfjsIW3_oLQJSSsxN5oFF9Xeg:[DEFAULT]'));
+        // let user_uid = this.user_detail.uid;
+        // const user_database_point = this.angfire.database.object('users/' + user_uid);
+        // user_database_point.subscribe(response => {
+        // })
+        // user_database_point.set({ name1: "kane1" });
     }
 
     isLoggedin() {
