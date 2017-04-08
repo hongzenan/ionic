@@ -10,6 +10,7 @@ import { Http } from '@angular/http';
 import { FileChooser } from 'ionic-native';
 import firebase from 'firebase';
 import { Geolocation, Geoposition } from '@ionic-native/geolocation';
+import { LocationAccuracy } from '@ionic-native/location-accuracy';
 
 /*
   Generated class for the Detail page.
@@ -67,7 +68,8 @@ export class DetailPage {
   constructor(public navCtrl: NavController, public navParams: NavParams,
     public actionCtrl: ActionSheetController, public datePicker: DatePicker,
     public angfire: AngularFire, public http: Http,
-    public alertCtrl: AlertController, public geolocation: Geolocation) {
+    public alertCtrl: AlertController, public geolocation: Geolocation,
+    public locac: LocationAccuracy) {
     this.item = this.navParams.get("item");
     this.diarys = JSON.parse(window.localStorage.getItem('diarys')) || [];
 
@@ -214,29 +216,38 @@ export class DetailPage {
     let options = {
       enableHighAccuracy: true
     }
-    this.geolocation.getCurrentPosition(options).then((position: Geoposition) => {
-      let url = "http://maps.google.com/maps/api/geocode/json?latlng=" + position.coords.latitude + "," + position.coords.longitude + "&language=zh-CN&sensor=false";
-      this.http.get(url).subscribe(res => {
-        let res_address_body = res.json().results[0].address_components;
-        let length_address_array = res_address_body.length;
-        let address = "";
-        for (let i = length_address_array - 2; i >= 0; i -= 1) {
-          address += res_address_body[i].long_name;
-        }
-        if (!this.location) {
-          this.location = address;
-        }
-        if (this.locates != null && this.locates.indexOf(address) > -1) {
-        } else {
-          this.locates.push(address);
-          const database_locates = this.angfire.database.object('users/' + this.user_uid + '/locates');
-          database_locates.set(this.locates);
-        }
-      }, (err) => {
-        console.log('err: ', err);
-      });
-    }).catch((err) => {
-      alert(err);
+    this.locac.canRequest().then((res: boolean) => {
+      if (res) {
+        this.locac.request(this.locac.REQUEST_PRIORITY_HIGH_ACCURACY).then(() => {
+          // geolocation
+          this.geolocation.getCurrentPosition(options).then((position: Geoposition) => {
+            let url = "http://maps.google.com/maps/api/geocode/json?latlng=" + position.coords.latitude + "," + position.coords.longitude + "&language=zh-CN&sensor=false";
+            this.http.get(url).subscribe(res => {
+              let res_address_body = res.json().results[0].address_components;
+              let length_address_array = res_address_body.length;
+              let address = "";
+              for (let i = length_address_array - 2; i >= 0; i -= 1) {
+                address += res_address_body[i].long_name;
+              }
+              if (!this.location) {
+                this.location = address;
+              }
+              if (this.locates != null && this.locates.indexOf(address) > -1) {
+              } else {
+                this.locates.push(address);
+                const database_locates = this.angfire.database.object('users/' + this.user_uid + '/locates');
+                database_locates.set(this.locates);
+              }
+            }, (err) => {
+              console.log('err: ', err);
+            });
+          }).catch((err) => {
+            alert(err);
+          });
+        }, (err) => {
+          alert(err);
+        });
+      }
     });
 
 

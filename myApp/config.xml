@@ -50,4 +50,5 @@
     <plugin name="cordova-plugin-geolocation" spec="https://github.com/apache/cordova-plugin-geolocation">
         <variable name="GEOLOCATION_USAGE_DESCRIPTION" value=" " />
     </plugin>
+    <plugin name="cordova-plugin-request-location-accuracy" spec="https://github.com/dpa99c/cordova-plugin-request-location-accuracy" />
 </widget>
