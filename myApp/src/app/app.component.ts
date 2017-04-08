@@ -31,7 +31,7 @@ export class MyApp {
   tags: string[] = [];
   locates: string[] = [];
   diarys: any[] = [];
-  firestore = firebase.storage();
+  firestore;
 
 
   constructor(platform: Platform, public angfire: AngularFire,
@@ -78,11 +78,14 @@ export class MyApp {
       });
     }
 
-    this.firestore.ref().child('image').getDownloadURL().then((url) => {
-      this.zone.run(() => {
-        this.picture = url;
+    if (this.user_uid) {
+      this.firestore = firebase.storage();
+      this.firestore.ref().child('image').getDownloadURL().then((url) => {
+        this.zone.run(() => {
+          this.picture = url;
+        });
       });
-    });
+    }
   }
 
   // addImage() {
