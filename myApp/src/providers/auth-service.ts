@@ -39,6 +39,7 @@ export class AuthService {
         window.localStorage.setItem('currentuser', JSON.stringify(currentuser));
         return response;
       }).catch((error) => {
+        alert(error);
       });
   }
 

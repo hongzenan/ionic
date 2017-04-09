@@ -20,7 +20,6 @@ import { AuthService } from '../providers/auth-service';
 
 import { DatePicker } from 'ionic2-date-picker/ionic2-date-picker';
 import { Geolocation } from '@ionic-native/geolocation';
-import { LocationAccuracy } from '@ionic-native/location-accuracy';
 
 
 // Initialize Firebase
@@ -68,7 +67,6 @@ const config = {
     //   useClass: IonicErrorHandler
     // },
     Geolocation,
-    LocationAccuracy,
     HttpModule
   ]
 })
