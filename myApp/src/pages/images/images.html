@@ -14,5 +14,7 @@
 
 
 <ion-content padding>
-  <ion-img width=80 height=80 src="../../assets/image.jpg"></ion-img>
+  <div *ngFor="let picture of pictures">
+    <ion-img width=80 height=80 [src]="picture"></ion-img>
+  </div>
 </ion-content>

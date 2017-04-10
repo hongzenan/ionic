@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { NavController, NavParams, ActionSheetController, AlertController } from 'ionic-angular';
 
 import { ImagesPage } from '../images/images';
@@ -60,6 +60,8 @@ export class DetailPage {
   location = "";
   RadioTagOpen: boolean;
   tag = "";
+  images: string[] = [];
+  pictures: string[] = [];
 
   nativepath: any;
   firestore = firebase.storage();
@@ -67,13 +69,14 @@ export class DetailPage {
   constructor(public navCtrl: NavController, public navParams: NavParams,
     public actionCtrl: ActionSheetController, public datePicker: DatePicker,
     public angfire: AngularFire, public http: Http,
-    public alertCtrl: AlertController, public geolocation: Geolocation) {
+    public alertCtrl: AlertController, public geolocation: Geolocation, public zone: NgZone) {
     this.item = this.navParams.get("item");
     this.diarys = JSON.parse(window.localStorage.getItem('diarys')) || [];
 
     if (this.item) {
       this.location = this.item.location;
       this.tag = this.item.tag;
+      this.images = this.item.images || "";
       for (let i of this.diarys) {
         if (i.text_title == this.item.text_title && i.text_content == this.item.text_content &&
           (i.text_title != null || i.text_content != null)) {
@@ -106,6 +109,8 @@ export class DetailPage {
 
     this.locates = JSON.parse(window.localStorage.getItem('locates')) || [];
     this.tags = JSON.parse(window.localStorage.getItem('tags')) || [];
+
+    this.downimages();
   }
 
   ionViewDidLoad() {
@@ -152,6 +157,16 @@ export class DetailPage {
     actionSheet.present();
   }
 
+  downimages() {
+    for (let i of this.images) {
+      this.firestore.ref().child('images/' + i).getDownloadURL().then((url) => {
+        this.zone.run(() => {
+          this.pictures.push(url);
+        });
+      });
+    }
+  }
+
   uploadimages() {
     (<any>window).resolveLocalFileSystemURL(this.nativepath, (res) => {
       res.file((resFile) => {
@@ -159,8 +174,11 @@ export class DetailPage {
         reader.readAsArrayBuffer(resFile);
         reader.onloadend = (evt: any) => {
           let imgBlob = new Blob([evt.target.result], { type: 'image/jpeg' });
-          let imageStore = this.firestore.ref().child('image');
+          let array_path = this.nativepath.split('/');
+          let lastOfArray = array_path[array_path.length - 1];
+          let imageStore = this.firestore.ref().child('images/' + lastOfArray);
           imageStore.put(imgBlob).then((res) => {
+            this.images.push(lastOfArray);
             alert('Upload Success');
           }).catch((err) => {
             alert('Upload Failed');
@@ -171,7 +189,9 @@ export class DetailPage {
   }
 
   goToImages() {
-    this.navCtrl.push(ImagesPage);
+    this.navCtrl.push(ImagesPage, {
+      "images": this.pictures
+    });
   }
 
   imageDetail() {
@@ -333,7 +353,8 @@ export class DetailPage {
       text_title: this.text.title,
       text_content: this.text.content,
       location: this.location,
-      tag: this.tag
+      tag: this.tag,
+      images: this.images
     }
     this.diarys.push(temp_for_diary);
     database_diarys.set(this.diarys)

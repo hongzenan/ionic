@@ -13,7 +13,10 @@ import { NavController, NavParams } from 'ionic-angular';
 })
 export class ImagesPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) { }
+  pictures: string[] = [];
+  constructor(public navCtrl: NavController, public navParams: NavParams) {
+    this.pictures = this.navParams.get('images');
+  }
 
   ionViewDidLoad() {
   }
