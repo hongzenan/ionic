@@ -10,6 +10,7 @@ import { Http } from '@angular/http';
 import { FileChooser } from 'ionic-native';
 import firebase from 'firebase';
 import { Geolocation, Geoposition } from '@ionic-native/geolocation';
+import { ImagePicker, ImagePickerOptions } from "@ionic-native/image-picker";
 
 /*
   Generated class for the Detail page.
@@ -69,7 +70,8 @@ export class DetailPage {
   constructor(public navCtrl: NavController, public navParams: NavParams,
     public actionCtrl: ActionSheetController, public datePicker: DatePicker,
     public angfire: AngularFire, public http: Http,
-    public alertCtrl: AlertController, public geolocation: Geolocation, public zone: NgZone) {
+    public alertCtrl: AlertController, public geolocation: Geolocation, public zone: NgZone,
+    public imagePicker: ImagePicker) {
     this.item = this.navParams.get("item");
     this.diarys = JSON.parse(window.localStorage.getItem('diarys')) || [];
 
@@ -142,6 +144,14 @@ export class DetailPage {
           text: 'Archive',
           handler: () => {
             console.log('Archive clicked');
+            let options: ImagePickerOptions = {
+              maximumImagesCount: 10
+            }
+            this.imagePicker.getPictures(options).then((results) => {
+              for (let imageItem of results) {
+                alert('image item: ' + imageItem);
+              }
+            }, (err) => { });
           }
         },
         {
@@ -347,6 +357,9 @@ export class DetailPage {
   }
 
   ionViewDidLeave() {
+  }
+
+  ionViewWillUnload() {
     const database_diarys = this.angfire.database.object('users/' + this.user_uid + '/diarys');
     let temp_for_diary = {
       date: this.dateContain,
@@ -357,10 +370,7 @@ export class DetailPage {
       images: this.images
     }
     this.diarys.push(temp_for_diary);
-    database_diarys.set(this.diarys)
-  }
-
-  ionViewWillUnload() {
+    database_diarys.set(this.diarys);
   }
 
   ionViewDidUnload() {
