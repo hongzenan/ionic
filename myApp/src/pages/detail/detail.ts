@@ -61,8 +61,9 @@ export class DetailPage {
   location = "";
   RadioTagOpen: boolean;
   tag = "";
-  images: string[] = [];
-  pictures: string[] = [];
+  lastImage: string = '';
+  imagesForStorage: string[] = [];
+  picturesToTransfer: string[] = [];
 
   nativepath: any;
   firestore = firebase.storage();
@@ -78,7 +79,7 @@ export class DetailPage {
     if (this.item) {
       this.location = this.item.location;
       this.tag = this.item.tag;
-      this.images = this.item.images || "";
+      this.imagesForStorage = this.item.images || "";
       for (let i of this.diarys) {
         if (i.text_title == this.item.text_title && i.text_content == this.item.text_content &&
           (i.text_title != null || i.text_content != null)) {
@@ -106,13 +107,19 @@ export class DetailPage {
     this.user_detail = JSON.parse(window.localStorage.getItem('firebase:authUser:AIzaSyDRnt4FM3wfjsIW3_oLQJSSsxN5oFF9Xeg:[DEFAULT]'));
     this.user_uid = this.user_detail.uid;
 
+    this.locates = JSON.parse(window.localStorage.getItem('locates')) || [];
+    this.tags = JSON.parse(window.localStorage.getItem('tags')) || [];
+    if (this.tags.indexOf(this.tag) < 0) {
+      this.tag = "";
+    }
+    if (this.locates.indexOf(this.location) < 0) {
+      this.location = "";
+    }
+
     // get geolocation
     this.getGeolocation();
 
-    this.locates = JSON.parse(window.localStorage.getItem('locates')) || [];
-    this.tags = JSON.parse(window.localStorage.getItem('tags')) || [];
-
-    this.downimages();
+    this.downloadimages();
   }
 
   ionViewDidLoad() {
@@ -149,7 +156,10 @@ export class DetailPage {
             }
             this.imagePicker.getPictures(options).then((results) => {
               for (let imageItem of results) {
-                alert('image item: ' + imageItem);
+                this.nativepath = imageItem;
+                this.lastImage = this.nativepath;
+                alert('picker: ' + this.nativepath);
+                this.uploadimages();
               }
             }, (err) => { });
           }
@@ -167,11 +177,14 @@ export class DetailPage {
     actionSheet.present();
   }
 
-  downimages() {
-    for (let i of this.images) {
+  downloadimages() {
+    for (let i of this.imagesForStorage) {
       this.firestore.ref().child('images/' + i).getDownloadURL().then((url) => {
         this.zone.run(() => {
-          this.pictures.push(url);
+          this.picturesToTransfer.push(url);
+
+          // set image to lastImage
+          this.lastImage = this.picturesToTransfer[this.picturesToTransfer.length - 1];
         });
       });
     }
@@ -188,8 +201,9 @@ export class DetailPage {
           let lastOfArray = array_path[array_path.length - 1];
           let imageStore = this.firestore.ref().child('images/' + lastOfArray);
           imageStore.put(imgBlob).then((res) => {
-            this.images.push(lastOfArray);
+            this.imagesForStorage.push(lastOfArray);
             alert('Upload Success');
+            alert('picture: ' + lastOfArray);
           }).catch((err) => {
             alert('Upload Failed');
           });
@@ -200,7 +214,7 @@ export class DetailPage {
 
   goToImages() {
     this.navCtrl.push(ImagesPage, {
-      "images": this.pictures
+      "images": this.picturesToTransfer
     });
   }
 
@@ -241,34 +255,34 @@ export class DetailPage {
   }
 
   getGeolocation() {
-    let options = {
-      enableHighAccuracy: true
-    }
-    // geolocation
-    this.geolocation.getCurrentPosition(options).then((position: Geoposition) => {
-      let url = "http://maps.google.com/maps/api/geocode/json?latlng=" + position.coords.latitude + "," + position.coords.longitude + "&language=zh-CN&sensor=false";
-      this.http.get(url).subscribe(res => {
-        let res_address_body = res.json().results[0].address_components;
-        let length_address_array = res_address_body.length;
-        let address = "";
-        for (let i = length_address_array - 2; i >= 0; i -= 1) {
-          address += res_address_body[i].long_name;
-        }
-        if (!this.location) {
+    if (!this.location) {
+      let options = {
+        enableHighAccuracy: true
+      }
+      // geolocation
+      this.geolocation.getCurrentPosition(options).then((position: Geoposition) => {
+        let url = "http://maps.google.com/maps/api/geocode/json?latlng=" + position.coords.latitude + "," + position.coords.longitude + "&language=zh-CN&sensor=false";
+        this.http.get(url).subscribe(res => {
+          let res_address_body = res.json().results[0].address_components;
+          let length_address_array = res_address_body.length;
+          let address = "";
+          for (let i = length_address_array - 2; i >= 0; i -= 1) {
+            address += res_address_body[i].long_name;
+          }
           this.location = address;
-        }
-        if (this.locates != null && this.locates.indexOf(address) > -1) {
-        } else {
-          this.locates.push(address);
-          const database_locates = this.angfire.database.object('users/' + this.user_uid + '/locates');
-          database_locates.set(this.locates);
-        }
-      }, (err) => {
-        console.log('err: ', err);
+          if (this.locates != null && this.locates.indexOf(address) > -1) {
+          } else {
+            this.locates.push(address);
+            const database_locates = this.angfire.database.object('users/' + this.user_uid + '/locates');
+            database_locates.set(this.locates);
+          }
+        }, (err) => {
+          console.log('err: ', err);
+        });
+      }).catch((err) => {
+        alert(err);
       });
-    }).catch((err) => {
-      alert(err);
-    });
+    }
 
 
 
@@ -367,7 +381,7 @@ export class DetailPage {
       text_content: this.text.content,
       location: this.location,
       tag: this.tag,
-      images: this.images
+      images: this.imagesForStorage
     }
     this.diarys.push(temp_for_diary);
     database_diarys.set(this.diarys);

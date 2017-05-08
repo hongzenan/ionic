@@ -14,28 +14,35 @@
     <ion-list-header>
       {{ month.month }}
     </ion-list-header>
-    <button ion-item *ngFor="let item of month.diarys" class="diary-item" (click)="goToDetail(item)">
-      <div class="tag-color-side-bar"></div>
-      <div class="item-time-middle-bar">
-        <div class="item-time-bar-one">{{ item.date.day }}</div>
-        <div class="item-time-bar-one">{{ item.date.date }}</div>
-        <div class="item-time-bar-one">{{ item.date.hours}} : {{ item.date.minutes}}</div>
-      </div>
-      <div class="item-content-preview">
-        <div class="item-content-preview-title">{{ item.text_title }} {{ item.text_content }}</div>
-        <div class="item-content-preview-tags">
-          <div class="item-content-preview-tags-item">
-            <ion-icon name="add"></ion-icon>
+    <ion-item-sliding *ngFor="let item of month.diarys">
+      <ion-item style ion-item  class="diary-item" (click)="goToDetail(item)">
+        <!--<button style ion-item *ngFor="let item of month.diarys" class="diary-item" (click)="goToDetail(item)">-->
+          <div class="tag-color-side-bar"></div>
+          <div class="item-time-middle-bar">
+            <div class="item-time-bar-one">{{ item.date.day }}</div>
+            <div class="item-time-bar-one">{{ item.date.date }}</div>
+            <div class="item-time-bar-one">{{ item.date.hours}} : {{ item.date.minutes}}</div>
           </div>
-          <div class="item-content-preview-tags-item">
-            <ion-icon name="image"></ion-icon>
+          <div class="item-content-preview">
+            <div class="item-content-preview-title">{{ item.text_title }} {{ item.text_content }}</div>
+            <div class="item-content-preview-tags">
+              <div class="item-content-preview-tags-item">
+                <ion-icon name="add"></ion-icon>
+              </div>
+              <div class="item-content-preview-tags-item">
+                <ion-icon name="image"></ion-icon>
+              </div>
+              <div class="item-content-preview-tags-item">
+                <ion-icon name="pin"></ion-icon>
+              </div>
+            </div>
           </div>
-          <div class="item-content-preview-tags-item">
-            <ion-icon name="pin"></ion-icon>
-          </div>
-        </div>
-      </div>
-    </button>
+        <!--</button>-->
+      </ion-item>
+      <ion-item-options>
+        <button (click)="delete(item)"><ion-icon name="trash"></ion-icon></button>
+      </ion-item-options>
+    </ion-item-sliding>
   </ion-list>
 
   <button ion-button (click)="show()">Show</button>

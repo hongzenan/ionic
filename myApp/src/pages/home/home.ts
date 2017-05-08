@@ -106,6 +106,17 @@ export class HomePage {
         });
     }
 
+    delete(item) {
+        const database_diarys = this.angfire.database.object('users/' + this.user_uid + '/diarys');
+        for (let i of this.diarys) {
+            if (i.text_title == item.text_title && i.text_content == item.text_content &&
+                (i.text_title != null || i.text_content != null)) {
+                this.diarys.splice(this.diarys.indexOf(i), 1);
+            }
+        }
+        database_diarys.set(this.diarys);
+    }
+
     // sort by date
     order_diarys(response) {
         response.sort((a, b) => {
