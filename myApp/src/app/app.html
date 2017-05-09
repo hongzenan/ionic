@@ -23,32 +23,55 @@
     </div>
     <!--items-->
     <ion-list>
-      <button ion-item class="item-background" (click)="toggleForDate()">
-        date
+      <button class="item-background tag-head" (click)="toggleForDate()">
+        <span>日期</span>
+        <ion-icon class="tag-arrow" *ngIf="!toggleDate" name="arrow-dropdown-circle"></ion-icon>
+        <ion-icon class="tag-arrow" *ngIf="toggleDate" name="arrow-dropup-circle"></ion-icon>
       </button>
-
       <div class="date-wrap" *ngIf="toggleDate">
         <ion-calendar></ion-calendar>
       </div>
 
-      <button ion-item class="item-background" (click)="toggleForTags()">
-        tags
+      <button class="item-background tag-head" (click)="toggleForTags()">
+        <span class="tag-span">标签</span>
+        <ion-icon class="tag-arrow" *ngIf="!toggleTags" name="arrow-dropdown-circle"></ion-icon>
+        <ion-icon class="tag-arrow" *ngIf="toggleTags" name="arrow-dropup-circle"></ion-icon>
       </button>
-      <ion-list *ngIf="toggleTags">
-        <button ion-item *ngFor="let item of tags" (click)="deleteTag(item)">{{item}} is good</button>
+      <div *ngIf="toggleTags">
+        <div *ngFor="let item of tags" class="tag-container">
+          <div id="abc" class="tag-item" (click)="select(item)">
+            {{item}}
+          </div>
+          <div class="tag-icon">
+            <ion-icon name="close" style="display:block;" (click)="deleteTag(item)"></ion-icon>
+            <ion-icon name="create" style="display:block;"></ion-icon>
+          </div>
+        </div>
+
         <button ion-item (click)="addTag()">
           <ion-icon style="padding-left: 110px" name="add"></ion-icon>
         </button>
-      </ion-list>
-      <button ion-item class="item-background" (click)="toggleForLocates()">
-        locates
+      </div>
+      <button class="item-background tag-head" (click)="toggleForLocates()">
+        <span class="tag-span">地址</span>
+        <ion-icon class="tag-arrow" *ngIf="!toggleLocates" name="arrow-dropdown-circle"></ion-icon>
+        <ion-icon class="tag-arrow" *ngIf="toggleLocates" name="arrow-dropup-circle"></ion-icon>
       </button>
-      <ion-list *ngIf="toggleLocates">
-        <button ion-item *ngFor="let item of locates" (click)="deleteLocate(item)">{{item}} is bad</button>
+      <div *ngIf="toggleLocates">
+        <div *ngFor="let item of locates" class="tag-container">
+          <div class="tag-item">
+            {{item}}
+          </div>
+          <div class="tag-icon">
+            <ion-icon name="close" style="display:block;" (click)="deleteLocate(item)"></ion-icon>
+            <ion-icon name="create" style="display:block;"></ion-icon>
+          </div>
+        </div>
+
         <button ion-item (click)="addLocate()">
           <ion-icon style="padding-left: 110px" name="add"></ion-icon>
         </button>
-      </ion-list>
+      </div>
     </ion-list>
   </ion-content>
 </ion-menu>

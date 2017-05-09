@@ -88,6 +88,45 @@
   .date-wrap {
     max-height: 400px;
   }
+  .tag-head {
+    width: 100%;
+    height: 50px;
+    line-height: 50px;
+    padding-left: 10px;
+    text-align: left;
+    font: 100%/1 sans-serif;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    background-color: white;
+    border-bottom: 1px solid rgba(0, 0, 0, .1);    
+  }
+  .tag-container {
+    border-bottom: 1px solid rgba(0, 0, 0, .1);
+  }
+  .tag-item {
+    display: inline-block;
+    width: 90%;
+    height: 40px;
+    line-height: 40px;
+    padding-left: 10px;
+    font-family: sans-serif;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: top;
+  }
+  .tag-icon {
+    display: inline-block;
+    vertical-align: top;
+    padding-top: 4px;
+  }
+  .tag-span {
+    
+  }
+  .tag-arrow {
+    margin-right: 30px;
+  }
 }
 
 table {
