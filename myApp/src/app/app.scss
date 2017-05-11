@@ -116,6 +116,9 @@
     text-overflow: ellipsis;
     vertical-align: top;
   }
+  .tag-item-selected {
+    background: red;
+  }
   .tag-icon {
     display: inline-block;
     vertical-align: top;

@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Events } from 'ionic-angular';
 import { DatePipe } from "@angular/common";
 
 @Component({
@@ -24,17 +25,25 @@ export class IonCalendar {
   weekDays: string[] = [];
   pastDates: number[] = [];
 
+  monthNames = [
+    "一月", "二月", "三月",
+    "四月", "五月", "六月", "七月",
+    "八月", "九月", "十月",
+    "十一月", "十二月"
+  ]
+  dateSelected: boolean = false;
+
   rows = [];
   stop = false;
   todayEvents = [];
 
-  constructor(private datePipe: DatePipe) {
+  constructor(private datePipe: DatePipe, public eventsPublish: Events) {
     this.setUpWeekDaysLabels();
   }
 
   setUpWeekDaysLabels() {
     let date = new Date(2017, 0, 1); /* This date has to be a Sunday */
-    for(let i=0; i < 7; i++, date.setDate(date.getDate() + 1)) {
+    for (let i = 0; i < 7; i++ , date.setDate(date.getDate() + 1)) {
       let str: string = this.datePipe.transform(date, "EEE");
       str = str[0].toUpperCase() + str.slice(1);
       this.weekDays.push(str);
@@ -44,18 +53,18 @@ export class IonCalendar {
   ngOnChanges(changes: SimpleChanges) {
     /* If the currentDate was changed outside (in the parent component), we need to call this.calc() */
     /* But only if the month is changed */
-    if(changes["currentDate"] && !changes["currentDate"].isFirstChange()) {
+    if (changes["currentDate"] && !changes["currentDate"].isFirstChange()) {
       if (changes["currentDate"].currentValue.getMonth() != changes["currentDate"].previousValue.getMonth()) {
         this.calc();
       }
     }
 
-    if(changes["events"] && !changes["events"].isFirstChange()) {
+    if (changes["events"] && !changes["events"].isFirstChange()) {
       let listToRemoveClasses: HTMLCollection = document.getElementsByClassName("hasEvents");
       let n: number = listToRemoveClasses.length;
 
-      for(let i=0; i < n; i++)
-        if(listToRemoveClasses[0])
+      for (let i = 0; i < n; i++)
+        if (listToRemoveClasses[0])
           listToRemoveClasses[0].classList.remove("hasEvents"); /* Using index zero because the object is updated after we remove an item */
 
       this.setHasEventsClass();
@@ -63,7 +72,7 @@ export class IonCalendar {
     }
   }
 
-  ngAfterViewInit(){
+  ngAfterViewInit() {
     /* Calls `this.calc()` after receiving an initial date */
     this.currentDate.setHours(0, 0, 0, 0);
 
@@ -73,23 +82,23 @@ export class IonCalendar {
     });
   }
 
-  setHasEventsClass(){
+  setHasEventsClass() {
     let firstDayOfTheMonth = new Date(
-        this.currentDate.getFullYear(),
-        this.currentDate.getMonth(),
-        1
+      this.currentDate.getFullYear(),
+      this.currentDate.getMonth(),
+      1
     );
 
     let lastDayOfTheMonth = new Date(
-        this.currentDate.getFullYear(),
-        this.currentDate.getMonth() + 1,
-        0
+      this.currentDate.getFullYear(),
+      this.currentDate.getMonth() + 1,
+      0
     );
 
-    if(this.events)
+    if (this.events)
       this.events.forEach((item, index) => {
-        if(item.starts.getTime() >= firstDayOfTheMonth.getTime() && item.ends.getTime() < lastDayOfTheMonth.getTime()) {
-          if(document.getElementById("calendar-day-" + item.starts.getDate()))
+        if (item.starts.getTime() >= firstDayOfTheMonth.getTime() && item.ends.getTime() < lastDayOfTheMonth.getTime()) {
+          if (document.getElementById("calendar-day-" + item.starts.getDate()))
             document.getElementById("calendar-day-" + item.starts.getDate()).classList.add('hasEvents');
         }
       });
@@ -98,7 +107,7 @@ export class IonCalendar {
   setTodayClass() {
     /* Checks if the selected month and year are the current */
     let tmp = new Date();
-    if (tmp.getFullYear() == this.currentDate.getFullYear() && tmp.getMonth() == this.currentDate.getMonth()){
+    if (tmp.getFullYear() == this.currentDate.getFullYear() && tmp.getMonth() == this.currentDate.getMonth()) {
       var element = document.getElementById("calendar-day-" + tmp.getDate());
       if (element) {
         element.classList.remove("button-clear", "button-clear-md");
@@ -111,18 +120,18 @@ export class IonCalendar {
     /* Removes previous selectedDate class */
     let listToRemoveClasses: HTMLCollection = document.getElementsByClassName("selected");
     let n: number = listToRemoveClasses.length;
-    for(let i=0; i < n; i++)
+    for (let i = 0; i < n; i++)
       listToRemoveClasses[0].classList.remove("selected"); /* Using index zero because the object is updated after we remove an item */
 
 
     var element = document.getElementById("calendar-day-" + this.currentDate.getDate());
-    if(element)
+    if (element)
       element.classList.add("selected");
   }
 
-  setToday(){
+  setToday() {
     let tmp = new Date();
-    tmp.setHours(0,0,0,0);
+    tmp.setHours(0, 0, 0, 0);
 
     let calc: boolean = tmp.getMonth() + "" + tmp.getFullYear() != this.currentDate.getMonth() + "" + this.currentDate.getFullYear();
 
@@ -134,21 +143,21 @@ export class IonCalendar {
   /**
    * Recalculates the rows and columns needed to represent the new month selected
    */
-  calc(){
+  calc() {
     /* Resets the rows */
     this.rows = [];
 
     let tmp = new Date(this.currentDate.getTime()); tmp.setDate(1);
 
-    while(tmp.getMonth() == this.currentDate.getMonth()){
+    while (tmp.getMonth() == this.currentDate.getMonth()) {
       /* Pushes a new empty row */
       this.rows.push(['', '', '', '', '', '', '']);
-      while(tmp.getDay() < 6 && tmp.getMonth() == this.currentDate.getMonth()){
+      while (tmp.getDay() < 6 && tmp.getMonth() == this.currentDate.getMonth()) {
         /* Populates the row only where needed */
         this.rows[this.rows.length - 1][tmp.getDay()] = tmp.getDate();
         tmp.setDate(tmp.getDate() + 1);
       }
-      if(tmp.getMonth() == this.currentDate.getMonth())
+      if (tmp.getMonth() == this.currentDate.getMonth())
         this.rows[this.rows.length - 1][tmp.getDay()] = tmp.getDate();
       tmp.setDate(tmp.getDate() + 1);
     }
@@ -161,29 +170,29 @@ export class IonCalendar {
     });
   }
 
-  disableDates(){
+  disableDates() {
     // Disabling past dates
-  	if(this.disablePastDates){
-		  this.pastDates = [];
-		  let today = new Date();
-		  // Checks if the current month is being shown
-		  if (today.getFullYear() == this.currentDate.getFullYear() && today.getMonth() == this.currentDate.getMonth()) {
-		  	// If current month is being shown, disable only the past days
-			  for(let i = 1; i < today.getDate(); i++){
-				  this.pastDates.push(i);
-			  }
-		  } else if(this.currentDate.getTime() < today.getTime()){
-		  	// If a previous month is being show (disable all days)
-			  for(let i = 1; i <= 31; i++){
-				  this.pastDates.push(i);
-			  }
-		  }
-	  }
+    if (this.disablePastDates) {
+      this.pastDates = [];
+      let today = new Date();
+      // Checks if the current month is being shown
+      if (today.getFullYear() == this.currentDate.getFullYear() && today.getMonth() == this.currentDate.getMonth()) {
+        // If current month is being shown, disable only the past days
+        for (let i = 1; i < today.getDate(); i++) {
+          this.pastDates.push(i);
+        }
+      } else if (this.currentDate.getTime() < today.getTime()) {
+        // If a previous month is being show (disable all days)
+        for (let i = 1; i <= 31; i++) {
+          this.pastDates.push(i);
+        }
+      }
+    }
 
-	  // Disable chosen week days
-	  if(this.weekDaysToDisable.length){
+    // Disable chosen week days
+    if (this.weekDaysToDisable.length) {
 
-	  }
+    }
   }
 
   /**
@@ -191,26 +200,33 @@ export class IonCalendar {
    * (no need to call this.calc() because the user can't click a date on a different month)
    * @param day number The day that was clicked
    */
-  dateClicked(day){
+  dateClicked(day) {
     let clickedDate = new Date(this.currentDate);
     clickedDate.setDate(day);
 
     this.updateSelectedDate(clickedDate);
+
+
+    let year = this.currentDate.getFullYear();
+    let month = this.monthNames[this.currentDate.getMonth()];
+    let dayForPublish = this.currentDate.getDate();
+
+    this.eventsPublish.publish('calc:select', year, month, day, 'date');
   }
 
   /**
    * Subtracts a month on currentDate
    */
-  previousMonth(){
+  previousMonth() {
     let tmp = new Date(
-        this.currentDate.getFullYear(),
-        this.currentDate.getMonth() - 1,
-        this.currentDate.getDate()
+      this.currentDate.getFullYear(),
+      this.currentDate.getMonth() - 1,
+      this.currentDate.getDate()
     );
 
     /* Prevents skipping a month if the previous month doesn't have the selected day */
     /* Ex: Mar 31st -> Feb 28th (because Feb doesn't have a 31st) */
-    while(tmp.getMonth() > this.currentDate.getMonth() - 1 && tmp.getFullYear() == this.currentDate.getFullYear()) {
+    while (tmp.getMonth() > this.currentDate.getMonth() - 1 && tmp.getFullYear() == this.currentDate.getFullYear()) {
       tmp.setDate(tmp.getDate() - 1);
     }
 
@@ -222,16 +238,16 @@ export class IonCalendar {
   /**
    * Adds a month on currentDate
    */
-  nextMonth(){
+  nextMonth() {
     let tmp = new Date(
-        this.currentDate.getFullYear(),
-        this.currentDate.getMonth() + 1,
-        this.currentDate.getDate()
+      this.currentDate.getFullYear(),
+      this.currentDate.getMonth() + 1,
+      this.currentDate.getDate()
     );
 
     /* Prevents skipping a month if the next month doesn't have the selected day */
     /* Ex: Jan 31st -> Feb 28th (because Feb doesn't have a 31st) */
-    while(tmp.getMonth() > this.currentDate.getMonth() + 1) {
+    while (tmp.getMonth() > this.currentDate.getMonth() + 1) {
       tmp.setDate(tmp.getDate() - 1);
     }
 
@@ -240,8 +256,8 @@ export class IonCalendar {
     this.calc();
   }
 
-  updateSelectedDate(newDate: Date = null){
-    if(newDate) {
+  updateSelectedDate(newDate: Date = null) {
+    if (newDate) {
       this.currentDate = newDate;
     }
 
@@ -253,15 +269,15 @@ export class IonCalendar {
     });
   }
 
-  showTodayEvents(){
+  showTodayEvents() {
     let tmp = [];
 
     /* Checks for events on the new selected date */
     this.events.forEach((item) => {
       var itemDay = new Date(item.starts);
-      itemDay.setHours(0,0,0,0);
+      itemDay.setHours(0, 0, 0, 0);
 
-      if(itemDay.getTime() == this.currentDate.getTime())
+      if (itemDay.getTime() == this.currentDate.getTime())
         tmp.push(item);
     });
 

@@ -1,5 +1,5 @@
 import { Component, NgZone } from '@angular/core';
-import { Platform, AlertController } from 'ionic-angular';
+import { Platform, AlertController, Events } from 'ionic-angular';
 import { StatusBar, Splashscreen } from 'ionic-native';
 
 import { HomePage } from '../pages/home/home';
@@ -32,10 +32,14 @@ export class MyApp {
   locates: string[] = [];
   diarys: any[] = [];
   firestore;
+  tagSelected: boolean = false;
+  lastTagItem: string = "";
+  locationSelected: boolean = false;
+  lastLocationItem: string = "";
 
 
   constructor(platform: Platform, public angfire: AngularFire,
-    public alertCtrl: AlertController, public zone: NgZone) {
+    public alertCtrl: AlertController, public zone: NgZone, public events: Events) {
     platform.ready().then(() => {
       StatusBar.styleDefault()
       Splashscreen.hide()
@@ -185,5 +189,40 @@ export class MyApp {
 
   toggleForDate() {
     this.toggleDate = !this.toggleDate;
+    if (!this.toggleDate) {
+      this.events.publish('calc:unselect', 'date');
+    }
+  }
+
+  selectTag(item) {
+    console.log(item);
+    if (item == this.lastTagItem) {
+      this.tagSelected = !this.tagSelected;
+    } else {
+      this.tagSelected = true;
+    }
+    this.lastTagItem = item;
+    if (this.tagSelected) {
+      console.log("ceshi");
+      this.events.publish('tag:select', item, "tag");
+    } else {
+      this.events.publish('tag:unselect', "tag");
+    }
+  }
+
+  selectLocation(item) {
+    console.log('location: ', item);
+    if (item == this.lastLocationItem) {
+      this.locationSelected = !this.locationSelected;
+    } else {
+      this.locationSelected = true;
+    }
+    this.lastLocationItem = item;
+    if (this.locationSelected) {
+      console.log("en he?");
+      this.events.publish('location:select', item, "location");
+    } else {
+      this.events.publish('location:unselect', "location");
+    }
   }
 }

@@ -39,7 +39,7 @@
       </button>
       <div *ngIf="toggleTags">
         <div *ngFor="let item of tags" class="tag-container">
-          <div id="abc" class="tag-item" (click)="select(item)">
+          <div class="tag-item" [ngClass]="{'tag-item-selected': (tagSelected && item == lastTagItem)}" (click)="selectTag(item)">
             {{item}}
           </div>
           <div class="tag-icon">
@@ -59,7 +59,7 @@
       </button>
       <div *ngIf="toggleLocates">
         <div *ngFor="let item of locates" class="tag-container">
-          <div class="tag-item">
+          <div class="tag-item" [ngClass]="{'tag-item-selected': (locationSelected && item == lastLocationItem)}" (click)="selectLocation(item)">
             {{item}}
           </div>
           <div class="tag-icon">

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core'
-import { NavController, ToastController } from 'ionic-angular';
+import { NavController, ToastController, Events } from 'ionic-angular';
 import { AngularFire } from 'angularfire2';
 
 // pages
@@ -31,10 +31,26 @@ export class HomePage {
         "四月", "五月", "六月", "七月",
         "八月", "九月", "十月",
         "十一月", "十二月"
-    ]
+    ];
+    itemTagSelected: boolean = false;
+    itemLocationSelected: boolean = false;
+    itemDateSelected: boolean = false;
+    itemTag: string = "";
+    typeTag: string = "";
+    itemLocation: string = "";
+    typeLocation: string = "";
+    itemYear: string = "";
+    itemMonth: string = "";
+    itemDay: string = "";
+    typeDate: string = "";
 
     constructor(public navCtrl: NavController, public angfire: AngularFire, private authservice: AuthService,
-        public toastCtrl: ToastController) {
+        public toastCtrl: ToastController, public events: Events) {
+        // events事件大军
+        this.listenTag();
+        this.listenLocation();
+        this.listenDate();
+
         this.user = "";
         if (!this.isLoggedin()) {
             this.navCtrl.push(LoginPage)
@@ -42,34 +58,78 @@ export class HomePage {
             this.user = window.localStorage.getItem('currentuser');
             this.user_detail = JSON.parse(window.localStorage.getItem('firebase:authUser:AIzaSyDRnt4FM3wfjsIW3_oLQJSSsxN5oFF9Xeg:[DEFAULT]'));
             this.user_uid = this.user_detail.uid;
-            // get diarys real time
-            const database_diarys = this.angfire.database.object('users/' + this.user_uid + '/diarys');
-            database_diarys.subscribe(response => {
-                if (response.length > 1) {
-                    this.order_diarys(response);
-                }
-                this.diarys = [];
-                this.diarys_array = [];
-                this.diarys_help = {};
+            this.getRealData();
+        }
+    }
+
+    getRealData() {
+        // get diarys real time
+        const database_diarys = this.angfire.database.object('users/' + this.user_uid + '/diarys');
+        database_diarys.subscribe(response => {
+            // normal set diary_arrays
+            if (response.length > 1) {
+                this.order_diarys(response);
+            }
+            this.diarys = [];
+            this.diarys_array = [];
+            this.diarys_help = {};
+            // 判断是否选中，进行filter
+            if (!this.itemTagSelected && !this.itemLocationSelected && !this.itemDateSelected) {
                 for (let i of response) {
                     this.diarys.push(i);
                 }
-                for (let i of this.diarys) {
-                    if (this.diarys_help[i.date.year + i.date.month] == undefined) {
-                        this.diarys_help[i.date.year + i.date.month] = [];
+            } else {
+                for (let i of response) {
+                    if (this.typeTag == "tag" && this.typeLocation == "location" && this.typeDate == "date") {
+                        if (i.tag == this.itemTag && i.location == this.itemLocation &&
+                            (i.date.year == this.itemYear && i.date.month == this.itemMonth && i.date.date == this.itemDay)) {
+                            this.diarys.push(i);
+                        }
+                    } else if (this.typeTag == "tag" && this.typeLocation == "location") {
+                        if (i.tag == this.itemTag && i.location == this.itemLocation) {
+                            this.diarys.push(i);
+                        }
+                    } else if (this.typeTag == "tag" && this.typeDate == "date") {
+                        if (i.tag == this.itemTag &&
+                            (i.date.year == this.itemYear && i.date.month == this.itemMonth && i.date.date == this.itemDay)) {
+                            this.diarys.push(i);
+                        }
+                    } else if (this.typeLocation == "location" && this.typeDate == "date") {
+                        if (i.location == this.itemLocation &&
+                            (i.date.year == this.itemYear && i.date.month == this.itemMonth && i.date.date == this.itemDay)) {
+                            this.diarys.push(i);
+                        }
+                    } else if (this.typeTag == "tag") {
+                        if (i.tag == this.itemTag) {
+                            this.diarys.push(i);
+                        }
+                    } else if (this.typeLocation == "location") {
+                        if (i.location == this.itemLocation) {
+                            this.diarys.push(i);
+                        }
+                    } else if (this.typeDate == "date") {
+                        if (i.date.year == this.itemYear && i.date.month == this.itemMonth && i.date.date == this.itemDay) {
+                            this.diarys.push(i);
+                        }
                     }
-                    this.diarys_help[i.date.year + i.date.month].push(i);
                 }
-                let key_list = Object.keys(this.diarys_help);
-                for (let i of key_list) {
-                    this.diarys_array_item = {
-                        month: i,
-                        diarys: this.diarys_help[i]
-                    }
-                    this.diarys_array.push(this.diarys_array_item);
+            }
+            // 对diarys进行按日期分类处理
+            for (let i of this.diarys) {
+                if (this.diarys_help[i.date.year + i.date.month] == undefined) {
+                    this.diarys_help[i.date.year + i.date.month] = [];
                 }
-            });
-        }
+                this.diarys_help[i.date.year + i.date.month].push(i);
+            }
+            let key_list = Object.keys(this.diarys_help);
+            for (let i of key_list) {
+                this.diarys_array_item = {
+                    month: i,
+                    diarys: this.diarys_help[i]
+                }
+                this.diarys_array.push(this.diarys_array_item);
+            }
+        });
     }
 
     show() {
@@ -151,5 +211,56 @@ export class HomePage {
             }
         }
         return 0;
+    }
+
+    listenTag() {
+        this.events.subscribe('tag:select', (item, type) => {
+            console.log('it is in home.ts: ', item, type);
+            this.itemTagSelected = true;
+            this.itemTag = item;
+            this.typeTag = type;
+            this.getRealData();
+        });
+        this.events.subscribe('tag:unselect', (type) => {
+            this.itemTagSelected = false;
+            this.itemTag = "";
+            this.typeTag = "";
+            this.getRealData();
+        });
+    }
+
+    listenLocation() {
+        this.events.subscribe('location:select', (item, type) => {
+            console.log('it is in home.ts: ', item, type);
+            this.itemLocationSelected = true;
+            this.itemLocation = item;
+            this.typeLocation = type;
+            this.getRealData();
+        });
+        this.events.subscribe('location:unselect', (type) => {
+            this.itemLocationSelected = false;
+            this.itemLocation = "";
+            this.typeLocation = "";
+            this.getRealData();
+        });
+    }
+
+    listenDate() {
+        this.events.subscribe('calc:select', (year, month, day, type) => {
+            this.itemDateSelected = true;
+            this.itemYear = year;
+            this.itemMonth = month;
+            this.itemDay = day;
+            this.typeDate = type;
+            this.getRealData();
+        });
+        this.events.subscribe('calc:unselect', (type) => {
+            this.itemDateSelected = false;
+            this.itemYear = "";
+            this.itemMonth = "";
+            this.itemDay = "";
+            this.typeDate = "";
+            this.getRealData();
+        });
     }
 }
