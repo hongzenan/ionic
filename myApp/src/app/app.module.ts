@@ -20,7 +20,6 @@ import { AuthService } from '../providers/auth-service';
 
 import { DatePicker } from 'ionic2-date-picker/ionic2-date-picker';
 import { Geolocation } from '@ionic-native/geolocation';
-import { ImagePicker } from "@ionic-native/image-picker";
 
 // Initialize Firebase
 const config = {
@@ -67,7 +66,6 @@ const config = {
     //   useClass: IonicErrorHandler
     // },
     Geolocation,
-    ImagePicker,
     HttpModule
   ]
 })

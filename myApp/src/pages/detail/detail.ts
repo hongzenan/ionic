@@ -7,10 +7,9 @@ import { DatePicker } from 'ionic2-date-picker/ionic2-date-picker';
 
 import { AngularFire } from 'angularfire2';
 import { Http } from '@angular/http';
-import { FileChooser } from 'ionic-native';
+import { FileChooser, Camera, CameraOptions } from 'ionic-native';
 import firebase from 'firebase';
 import { Geolocation, Geoposition } from '@ionic-native/geolocation';
-import { ImagePicker, ImagePickerOptions } from "@ionic-native/image-picker";
 
 /*
   Generated class for the Detail page.
@@ -71,15 +70,14 @@ export class DetailPage {
   constructor(public navCtrl: NavController, public navParams: NavParams,
     public actionCtrl: ActionSheetController, public datePicker: DatePicker,
     public angfire: AngularFire, public http: Http,
-    public alertCtrl: AlertController, public geolocation: Geolocation, public zone: NgZone,
-    public imagePicker: ImagePicker) {
+    public alertCtrl: AlertController, public geolocation: Geolocation, public zone: NgZone) {
     this.item = this.navParams.get("item");
     this.diarys = JSON.parse(window.localStorage.getItem('diarys')) || [];
 
     if (this.item) {
       this.location = this.item.location;
       this.tag = this.item.tag;
-      this.imagesForStorage = this.item.images || "";
+      this.imagesForStorage = this.item.images || [];
       for (let i of this.diarys) {
         if (i.text_title == this.item.text_title && i.text_content == this.item.text_content &&
           (i.text_title != null || i.text_content != null)) {
@@ -149,19 +147,22 @@ export class DetailPage {
         },
         {
           text: 'Archive',
+          role: 'archive',
           handler: () => {
             console.log('Archive clicked');
-            let options: ImagePickerOptions = {
-              maximumImagesCount: 10
-            }
-            this.imagePicker.getPictures(options).then((results) => {
-              for (let imageItem of results) {
-                this.nativepath = imageItem;
-                this.lastImage = this.nativepath;
-                alert('picker: ' + this.nativepath);
-                this.uploadimages();
-              }
-            }, (err) => { });
+            const cameraOptions: CameraOptions = {
+              quality: 50,
+              destinationType: Camera.DestinationType.FILE_URI,
+              encodingType: Camera.EncodingType.JPEG,
+              mediaType: Camera.MediaType.PICTURE,
+              saveToPhotoAlbum: true
+            };
+
+            Camera.getPicture(cameraOptions).then((imageData) => {
+              alert(imageData);
+              this.nativepath = imageData;
+              this.uploadimages();
+            });
           }
         },
         {
