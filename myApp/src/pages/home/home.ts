@@ -43,6 +43,7 @@ export class HomePage {
     itemMonth: string = "";
     itemDay: string = "";
     typeDate: string = "";
+    itemQuery: string = "";
 
     constructor(public navCtrl: NavController, public angfire: AngularFire, private authservice: AuthService,
         public toastCtrl: ToastController, public events: Events) {
@@ -50,6 +51,7 @@ export class HomePage {
         this.listenTag();
         this.listenLocation();
         this.listenDate();
+        this.listenQuery();
 
         this.user = "";
         if (!this.isLoggedin()) {
@@ -65,7 +67,16 @@ export class HomePage {
     getRealData() {
         // get diarys real time
         const database_diarys = this.angfire.database.object('users/' + this.user_uid + '/diarys');
-        database_diarys.subscribe(response => {
+        database_diarys.subscribe(resp => {
+            let response = resp;
+            if (this.itemQuery) {
+                const filtered = resp.filter((item) => {
+                    if (item.text_content.indexOf(this.itemQuery) > -1) {
+                        return item;
+                    }
+                });
+                response = filtered;
+            }
             // normal set diary_arrays
             if (response.length > 1) {
                 this.order_diarys(response);
@@ -215,7 +226,6 @@ export class HomePage {
 
     listenTag() {
         this.events.subscribe('tag:select', (item, type) => {
-            console.log('it is in home.ts: ', item, type);
             this.itemTagSelected = true;
             this.itemTag = item;
             this.typeTag = type;
@@ -231,7 +241,6 @@ export class HomePage {
 
     listenLocation() {
         this.events.subscribe('location:select', (item, type) => {
-            console.log('it is in home.ts: ', item, type);
             this.itemLocationSelected = true;
             this.itemLocation = item;
             this.typeLocation = type;
@@ -260,6 +269,17 @@ export class HomePage {
             this.itemMonth = "";
             this.itemDay = "";
             this.typeDate = "";
+            this.getRealData();
+        });
+    }
+
+    listenQuery() {
+        this.events.subscribe('query:select', (value) => {
+            this.itemQuery = value;
+            this.getRealData();
+        });
+        this.events.subscribe('query:unselect', () => {
+            this.itemQuery = "";
             this.getRealData();
         });
     }

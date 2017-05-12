@@ -32,11 +32,12 @@ export class MyApp {
   locates: string[] = [];
   diarys: any[] = [];
   firestore;
+  // filter
   tagSelected: boolean = false;
   lastTagItem: string = "";
   locationSelected: boolean = false;
   lastLocationItem: string = "";
-
+  
 
   constructor(platform: Platform, public angfire: AngularFire,
     public alertCtrl: AlertController, public zone: NgZone, public events: Events) {
@@ -97,10 +98,16 @@ export class MyApp {
   //   storageRef.getDownloadURL().then(url => this.picture = url);
   // }
 
-  onInput($event) {
+  onInput(event) {
+    if (event.target.value) {
+      this.events.publish('query:select', event.target.value);
+    }
+    if (event.target.value == "" || event.target.value == undefined) {
+      this.events.publish('query:unselect');
+    }
   }
 
-  onCancel($event) {
+  onCancel(event) {
   }
 
   toggleForTags() {
@@ -195,7 +202,6 @@ export class MyApp {
   }
 
   selectTag(item) {
-    console.log(item);
     if (item == this.lastTagItem) {
       this.tagSelected = !this.tagSelected;
     } else {
@@ -203,7 +209,6 @@ export class MyApp {
     }
     this.lastTagItem = item;
     if (this.tagSelected) {
-      console.log("ceshi");
       this.events.publish('tag:select', item, "tag");
     } else {
       this.events.publish('tag:unselect', "tag");
@@ -211,7 +216,6 @@ export class MyApp {
   }
 
   selectLocation(item) {
-    console.log('location: ', item);
     if (item == this.lastLocationItem) {
       this.locationSelected = !this.locationSelected;
     } else {
@@ -219,7 +223,6 @@ export class MyApp {
     }
     this.lastLocationItem = item;
     if (this.locationSelected) {
-      console.log("en he?");
       this.events.publish('location:select', item, "location");
     } else {
       this.events.publish('location:unselect', "location");
