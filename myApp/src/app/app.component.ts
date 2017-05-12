@@ -17,6 +17,8 @@ export class MyApp {
   user: any;
   email: string = "";
   picture: string = "";
+  total_items = 0;
+  selected_items = 0;
   // user detail and user_uid
   user_detail: any;
   user_uid: any;
@@ -37,7 +39,7 @@ export class MyApp {
   lastTagItem: string = "";
   locationSelected: boolean = false;
   lastLocationItem: string = "";
-  
+
 
   constructor(platform: Platform, public angfire: AngularFire,
     public alertCtrl: AlertController, public zone: NgZone, public events: Events) {
@@ -45,7 +47,8 @@ export class MyApp {
       StatusBar.styleDefault()
       Splashscreen.hide()
     });
-
+    
+    this.listenTotalItems();
     // store basic data of user 
     this.user = JSON.parse(window.localStorage.getItem('currentuser')) || {};
     this.email = this.user.email || "";
@@ -227,5 +230,12 @@ export class MyApp {
     } else {
       this.events.publish('location:unselect', "location");
     }
+  }
+
+  listenTotalItems() {
+    this.events.subscribe('total:items', (total, selected) => {
+      this.total_items = total;
+      this.selected_items = selected;
+    });
   }
 }

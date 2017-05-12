@@ -17,6 +17,8 @@ export class HomePage {
     user_detail: any;
     user_uid: any;
     user: any;
+    total_items = 0;
+    selected_items = 0;
     myColor: string = "primary";
     // for items
     diarys_array: any[] = [];
@@ -68,6 +70,7 @@ export class HomePage {
         // get diarys real time
         const database_diarys = this.angfire.database.object('users/' + this.user_uid + '/diarys');
         database_diarys.subscribe(resp => {
+            this.total_items = resp.length;
             let response = resp;
             if (this.itemQuery) {
                 const filtered = resp.filter((item) => {
@@ -125,6 +128,8 @@ export class HomePage {
                     }
                 }
             }
+            this.selected_items = this.diarys.length;
+            this.events.publish('total:items', this.total_items, this.selected_items);
             // 对diarys进行按日期分类处理
             for (let i of this.diarys) {
                 if (this.diarys_help[i.date.year + i.date.month] == undefined) {
