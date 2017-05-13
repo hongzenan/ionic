@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, Events } from 'ionic-angular';
 
 import { AuthService } from '../../providers/auth-service';
 
@@ -18,7 +18,8 @@ export class LoginPage {
   email: any
   password: any
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public authservice: AuthService) { }
+  constructor(public navCtrl: NavController, public navParams: NavParams, 
+  public authservice: AuthService, public events: Events) { }
 
   ionViewDidLoad() {
   }
@@ -26,14 +27,20 @@ export class LoginPage {
   login() {
     this.authservice.login(this.email, this.password)
       .then((response) => {
-        if (response)
+        if (response) {
           this.navCtrl.pop();
+          this.events.publish('login');
+        }
       })
       .catch((error) => console.log("Cann't login success ", error));
   }
 
   gotoRegister() {
     this.navCtrl.push(RegisterPage);
+  }
+
+  resetPassword() {
+    this.authservice.resetPassword(this.email);
   }
 
 }

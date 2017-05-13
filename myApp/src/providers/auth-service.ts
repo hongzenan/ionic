@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AuthProviders, AuthMethods, AngularFireAuth, FirebaseAuthState, AngularFire } from 'angularfire2';
+import * as firebase from 'firebase';
 
 /*
   Generated class for the AuthService provider.
@@ -64,4 +65,7 @@ export class AuthService {
       .catch((error) => console.log('Log Out Failure ', error))
   }
 
+  resetPassword(email: string): firebase.Promise<void> {
+    return firebase.auth().sendPasswordResetEmail(email);
+  }
 }

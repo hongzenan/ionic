@@ -39,6 +39,12 @@ export class MyApp {
   lastTagItem: string = "";
   locationSelected: boolean = false;
   lastLocationItem: string = "";
+  database_tags: any;
+  database_locates: any;
+  database_diarys: any;
+  observableTags: any;
+  observableLocates: any;
+  observableDiarys: any;
 
 
   constructor(platform: Platform, public angfire: AngularFire,
@@ -47,8 +53,15 @@ export class MyApp {
       StatusBar.styleDefault()
       Splashscreen.hide()
     });
-    
+
     this.listenTotalItems();
+    this.listenLogin();
+    this.listenSignout();
+
+    this.getRealData();
+  }
+
+  getRealData() {
     // store basic data of user 
     this.user = JSON.parse(window.localStorage.getItem('currentuser')) || {};
     this.email = this.user.email || "";
@@ -58,8 +71,8 @@ export class MyApp {
     this.user_uid = this.user_detail.uid || "";
     if (window.localStorage.getItem('currentuser')) {
       //get tags from firebase
-      const database_tags = this.angfire.database.object('users/' + this.user_uid + '/tags');
-      database_tags.subscribe(response => {
+      this.database_tags = this.angfire.database.object('users/' + this.user_uid + '/tags');
+      this.observableTags = this.database_tags.subscribe(response => {
         this.tags = [];
         for (let i of response) {
           this.tags.push(i);
@@ -67,8 +80,8 @@ export class MyApp {
         window.localStorage.setItem('tags', JSON.stringify(this.tags));
       });
       // get locate from firebase
-      const database_locates = this.angfire.database.object('users/' + this.user_uid + '/locates');
-      database_locates.subscribe(response => {
+      this.database_locates = this.angfire.database.object('users/' + this.user_uid + '/locates');
+      this.observableLocates = this.database_locates.subscribe(response => {
         this.locates = [];
         for (let i of response) {
           this.locates.push(i);
@@ -76,8 +89,8 @@ export class MyApp {
         window.localStorage.setItem('locates', JSON.stringify(this.locates));
       });
       // get diarys from firebase
-      const database_diarys = this.angfire.database.object('users/' + this.user_uid + '/diarys');
-      database_diarys.subscribe(response => {
+      this.database_diarys = this.angfire.database.object('users/' + this.user_uid + '/diarys');
+      this.observableDiarys = this.database_diarys.subscribe(response => {
         this.diarys = [];
         for (let i of response) {
           this.diarys.push(i);
@@ -236,6 +249,23 @@ export class MyApp {
     this.events.subscribe('total:items', (total, selected) => {
       this.total_items = total;
       this.selected_items = selected;
+    });
+  }
+
+  listenLogin() {
+    this.events.subscribe('login', () => {
+      this.getRealData();
+    });
+  }
+
+  listenSignout() {
+    this.events.subscribe('signout', () => {
+      this.diarys = [];
+      this.tags = [];
+      this.locates = [];
+      this.observableTags.unsubscribe();
+      this.observableLocates.unsubscribe();
+      this.observableDiarys.unsubscribe();
     });
   }
 }
