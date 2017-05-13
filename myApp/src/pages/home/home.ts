@@ -59,6 +59,7 @@ export class HomePage {
         this.listenLogin();
         this.listenSignout();
 
+        this.toUnsubscribe();
         this.getRealData();
     }
 

@@ -58,6 +58,7 @@ export class MyApp {
     this.listenLogin();
     this.listenSignout();
 
+    this.toUnsubscribe();
     this.getRealData();
   }
 
@@ -247,7 +248,7 @@ export class MyApp {
 
   listenTotalItems() {
     this.events.subscribe('total:items', (total, selected) => {
-      this.total_items = total;
+      this.total_items = total || 0;
       this.selected_items = selected;
     });
   }
