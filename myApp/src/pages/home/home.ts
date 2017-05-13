@@ -167,12 +167,11 @@ export class HomePage {
 
     isLoggedin() {
         if (window.localStorage.getItem('currentuser')) {
-            return true
+            return true;
         }
     }
 
     signout() {
-        ;
         this.events.publish('signout');
         this.authservice.signOut().then(() => {
             this.navCtrl.push(LoginPage);
@@ -241,12 +240,14 @@ export class HomePage {
             this.itemTagSelected = true;
             this.itemTag = item;
             this.typeTag = type;
+            this.toUnsubscribe();
             this.getRealData();
         });
         this.events.subscribe('tag:unselect', (type) => {
             this.itemTagSelected = false;
             this.itemTag = "";
             this.typeTag = "";
+            this.toUnsubscribe();
             this.getRealData();
         });
     }
@@ -256,12 +257,14 @@ export class HomePage {
             this.itemLocationSelected = true;
             this.itemLocation = item;
             this.typeLocation = type;
+            this.toUnsubscribe();
             this.getRealData();
         });
         this.events.subscribe('location:unselect', (type) => {
             this.itemLocationSelected = false;
             this.itemLocation = "";
             this.typeLocation = "";
+            this.toUnsubscribe();
             this.getRealData();
         });
     }
@@ -273,6 +276,7 @@ export class HomePage {
             this.itemMonth = month;
             this.itemDay = day;
             this.typeDate = type;
+            this.toUnsubscribe();
             this.getRealData();
         });
         this.events.subscribe('calc:unselect', (type) => {
@@ -281,6 +285,7 @@ export class HomePage {
             this.itemMonth = "";
             this.itemDay = "";
             this.typeDate = "";
+            this.toUnsubscribe();
             this.getRealData();
         });
     }
@@ -288,16 +293,19 @@ export class HomePage {
     listenQuery() {
         this.events.subscribe('query:select', (value) => {
             this.itemQuery = value;
+            this.toUnsubscribe();
             this.getRealData();
         });
         this.events.subscribe('query:unselect', () => {
             this.itemQuery = "";
+            this.toUnsubscribe();
             this.getRealData();
         });
     }
 
     listenLogin() {
         this.events.subscribe('login', () => {
+            this.toUnsubscribe();
             this.getRealData();
         });
     }
@@ -307,5 +315,10 @@ export class HomePage {
             this.diarys_array = [];
             this.observableDiarys.unsubscribe();
         });
+    }
+
+    toUnsubscribe() {
+        if (this.observableDiarys)
+            this.observableDiarys.unsubscribe();
     }
 }

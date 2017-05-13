@@ -254,6 +254,7 @@ export class MyApp {
 
   listenLogin() {
     this.events.subscribe('login', () => {
+      this.toUnsubscribe();
       this.getRealData();
     });
   }
@@ -267,5 +268,13 @@ export class MyApp {
       this.observableLocates.unsubscribe();
       this.observableDiarys.unsubscribe();
     });
+  }
+
+  toUnsubscribe() {
+    if (this.observableDiarys) {
+      this.observableTags.unsubscribe();
+      this.observableLocates.unsubscribe();
+      this.observableDiarys.unsubscribe();
+    }
   }
 }
