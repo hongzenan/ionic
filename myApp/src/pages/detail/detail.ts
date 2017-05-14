@@ -179,6 +179,7 @@ export class DetailPage {
   }
 
   downloadimages() {
+    this.picturesToTransfer = [];
     for (let i of this.imagesForStorage) {
       this.firestore.ref().child('images/' + i).getDownloadURL().then((url) => {
         this.zone.run(() => {
@@ -205,6 +206,7 @@ export class DetailPage {
             this.imagesForStorage.push(lastOfArray);
             alert('Upload Success');
             alert('picture: ' + lastOfArray);
+            this.downloadimages();
           }).catch((err) => {
             alert('Upload Failed');
           });

@@ -5,6 +5,7 @@ import { StatusBar, Splashscreen } from 'ionic-native';
 import { HomePage } from '../pages/home/home';
 
 import { AngularFire } from 'angularfire2';
+import { FileChooser } from "ionic-native";
 import * as firebase from 'firebase';
 
 @Component({
@@ -17,6 +18,7 @@ export class MyApp {
   user: any;
   email: string = "";
   picture: string = "";
+  pictureTemp: string = "";
   total_items = 0;
   selected_items = 0;
   // user detail and user_uid
@@ -33,7 +35,7 @@ export class MyApp {
   tags: string[] = [];
   locates: string[] = [];
   diarys: any[] = [];
-  firestore;
+  firestore = firebase.storage();
   // filter
   tagSelected: boolean = false;
   lastTagItem: string = "";
@@ -45,6 +47,8 @@ export class MyApp {
   observableTags: any;
   observableLocates: any;
   observableDiarys: any;
+  nativepath: any;
+  observalbePicture: any;
 
 
   constructor(platform: Platform, public angfire: AngularFire,
@@ -60,6 +64,8 @@ export class MyApp {
 
     this.toUnsubscribe();
     this.getRealData();
+
+    this.downloadimage();
   }
 
   getRealData() {
@@ -99,21 +105,62 @@ export class MyApp {
         window.localStorage.setItem('diarys', JSON.stringify(this.diarys));
       });
     }
+  }
 
+  touxiang() {
+    FileChooser.open().then((url) => {
+      (<any>window).FilePath.resolveNativePath(url, (result) => {
+        this.nativepath = result;
+        this.uploadimages();
+      });
+    });
+  }
+
+  downloadimage() {
     if (this.user_uid) {
-      this.firestore = firebase.storage();
-      this.firestore.ref().child('image').getDownloadURL().then((url) => {
-        this.zone.run(() => {
-          this.picture = url;
-        });
+      const database_picture = this.angfire.database.object('users/' + this.user_uid + '/picture');
+      this.observalbePicture = database_picture.subscribe((resp) => {
+        if (resp) {
+          this.pictureTemp = resp.$value;
+        }
+
+        if (this.pictureTemp) {
+          this.firestore.ref().child('images/' + this.user_uid + '/' + this.pictureTemp).getDownloadURL().then((url) => {
+            this.zone.run(() => {
+              this.picture = url;
+            });
+          });
+        } else {
+          this.picture = "../assets/logo.jpg";
+        }
       });
     }
   }
 
-  // addImage() {
-  //   const storageRef = firebase.storage().ref().child('image.jpg');
-  //   storageRef.getDownloadURL().then(url => this.picture = url);
-  // }
+  uploadimages() {
+    (<any>window).resolveLocalFileSystemURL(this.nativepath, (res) => {
+      res.file((resFile) => {
+        let reader = new FileReader();
+        reader.readAsArrayBuffer(resFile);
+        reader.onloadend = (evt: any) => {
+          let imgBlob = new Blob([evt.target.result], { type: 'image/jpeg' });
+          let array_path = this.nativepath.split('/');
+          let lastOfArray = array_path[array_path.length - 1];
+          let imageStore = this.firestore.ref().child('images/' + this.user_uid + '/' + lastOfArray);
+          imageStore.put(imgBlob).then((res) => {
+            this.picture = lastOfArray;
+            const database_picture = this.angfire.database.object('users/' + this.user_uid + '/picture');
+            database_picture.set(this.picture);
+            alert('Upload Success');
+            alert('picture: ' + lastOfArray);
+            this.downloadimage();
+          }).catch((err) => {
+            alert('Upload Failed');
+          });
+        }
+      });
+    });
+  }
 
   onInput(event) {
     if (event.target.value) {
@@ -257,6 +304,7 @@ export class MyApp {
     this.events.subscribe('login', () => {
       this.toUnsubscribe();
       this.getRealData();
+      this.downloadimage();
     });
   }
 
@@ -265,9 +313,11 @@ export class MyApp {
       this.diarys = [];
       this.tags = [];
       this.locates = [];
+      this.picture = "";
       this.observableTags.unsubscribe();
       this.observableLocates.unsubscribe();
       this.observableDiarys.unsubscribe();
+      this.observalbePicture.unsubscribe();
     });
   }
 
@@ -276,6 +326,7 @@ export class MyApp {
       this.observableTags.unsubscribe();
       this.observableLocates.unsubscribe();
       this.observableDiarys.unsubscribe();
+      this.observalbePicture.unsubscribe();
     }
   }
 }
