@@ -14,6 +14,7 @@ import { DetailPage } from '../pages/detail/detail';
 import { ImagesPage } from '../pages/images/images';
 import { ImageDetailPage } from '../pages/image-detail/image-detail';
 import { IonCalendar } from '../components/ion-calendar/ion-calendar';
+import { ResetPasswordPage } from "../pages/reset-password/reset-password";
 
 // services
 import { AuthService } from '../providers/auth-service';
@@ -41,7 +42,8 @@ const config = {
     ImagesPage,
     ImageDetailPage,
     IonCalendar,
-    DatePicker
+    DatePicker,
+    ResetPasswordPage
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -57,7 +59,8 @@ const config = {
     ImagesPage,
     ImageDetailPage,
     IonCalendar,
-    DatePicker
+    DatePicker,
+    ResetPasswordPage
   ],
   providers: [
     AuthService,

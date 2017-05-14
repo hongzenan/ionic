@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, Events } from 'ionic-angular';
+import { NavController, NavParams, Events, AlertController } from 'ionic-angular';
 
 import { AuthService } from '../../providers/auth-service';
 
 import { RegisterPage } from '../register/register';
+import { ResetPasswordPage } from "../reset-password/reset-password";
 /*
   Generated class for the Login page.
 
@@ -18,8 +19,8 @@ export class LoginPage {
   email: any
   password: any
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, 
-  public authservice: AuthService, public events: Events) { }
+  constructor(public navCtrl: NavController, public navParams: NavParams,
+    public authservice: AuthService, public events: Events, public alertCtrl: AlertController) { }
 
   ionViewDidLoad() {
   }
@@ -35,12 +36,31 @@ export class LoginPage {
       .catch((error) => console.log("Cann't login success ", error));
   }
 
-  gotoRegister() {
-    this.navCtrl.push(RegisterPage);
+  signup() {
+    this.authservice.signup(this.email, this.password)
+      .then((response) => {
+        if (response) {
+          let alert = this.alertCtrl.create({
+            subTitle: "注册成功",
+            buttons: ['OK']
+          });
+          alert.present();
+        } else {
+          let alert = this.alertCtrl.create({
+            subTitle: "注册失败",
+            buttons: ['OK']
+          });
+          alert.present();
+        }
+      });
   }
 
-  resetPassword() {
-    this.authservice.resetPassword(this.email);
+  clearText() {
+    this.email = "";
+    this.password = "";
   }
 
+  toResetPassword() {
+    this.navCtrl.push(ResetPasswordPage);
+  }
 }
