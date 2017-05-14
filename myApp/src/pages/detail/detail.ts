@@ -221,10 +221,6 @@ export class DetailPage {
     });
   }
 
-  imageDetail() {
-    this.navCtrl.push(ImageDetailPage);
-  }
-
   showCalendar() {
     this.datePicker.showCalendar();
   }
