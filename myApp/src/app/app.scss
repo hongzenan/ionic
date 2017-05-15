@@ -35,7 +35,7 @@
   }
   .user-logo-wrap {
     height: 204px;
-    background-color: #151D20;
+    background: url('../assets/user-logo.jpg') top left / 100% 100% no-repeat;
     .user-logo {
       height: 100px;
       width: 100px;
@@ -48,24 +48,29 @@
       line-height: 40px;
       color: #E6E8DB;
       text-align: center;
+      span {
+        font-size: 16px;
+        color: #000;
+        font-weight: 600;
+      }
     }
   }
   .user-diary-count-wrap {
     font-size: 0px;
-    height: 40px;
-    margin-top: -40px;
+    height: 50px;
+    margin-top: -50px;
     text-align: center;
     .user-diary-today-count {
       font-size: 16px;
       color: #E6E8DB;
-      line-height: 40px;
+      line-height: 50px;
       width: 50%;
       display: inline-block;
     }
     .user-diary-all-count {
       font-size: 16px;
       color: #E6E8DB;
-      line-height: 40px;
+      line-height: 50px;
       width: 50%;
       display: inline-block;
     }
@@ -98,8 +103,8 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    background-color: white;
-    border-bottom: 1px solid rgba(0, 0, 0, .1);    
+    background-color: rgba(255, 127, 80, 1);
+    border-bottom: 1px solid rgba(0, 0, 0, .1);
   }
   .tag-container {
     border-bottom: 1px solid rgba(0, 0, 0, .1);
@@ -125,10 +130,10 @@
     padding-top: 4px;
   }
   .tag-span {
-    
+    color: white;
   }
   .tag-arrow {
-    margin-right: 30px;
+    margin-left: 5px;
   }
 }
 

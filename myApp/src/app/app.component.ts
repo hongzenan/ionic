@@ -131,7 +131,7 @@ export class MyApp {
             });
           });
         } else {
-          this.picture = "../assets/logo.jpg";
+          this.picture = "http://csssecrets.io/images/adamcatlace.jpg";
         }
       });
     }

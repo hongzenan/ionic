@@ -5,10 +5,10 @@
     <!--user logo-->
     <div class="user-logo-wrap">
       <div>
-        <img class="user-logo" [src]="picture" (click)="touxiang()">
+        <img class="user-logo" [src]="picture" (click)="touxiang()" alt="头像">
       </div>
       <div class="user-bar">
-        {{email}}
+        <span>{{email}}</span>
       </div>
     </div>
     <!--user diary-->
@@ -24,9 +24,9 @@
     <!--items-->
     <ion-list>
       <button class="item-background tag-head" (click)="toggleForDate()">
-        <span>日期</span>
-        <ion-icon class="tag-arrow" *ngIf="!toggleDate" name="arrow-dropdown-circle"></ion-icon>
-        <ion-icon class="tag-arrow" *ngIf="toggleDate" name="arrow-dropup-circle"></ion-icon>
+        <span class="tag-span">日期</span>
+        <ion-icon class="tag-arrow" *ngIf="!toggleDate" name="arrow-dropright"></ion-icon>
+        <ion-icon class="tag-arrow" *ngIf="toggleDate" name="arrow-dropdown"></ion-icon>
       </button>
       <div class="date-wrap" *ngIf="toggleDate">
         <ion-calendar></ion-calendar>
@@ -34,8 +34,8 @@
 
       <button class="item-background tag-head" (click)="toggleForTags()">
         <span class="tag-span">标签</span>
-        <ion-icon class="tag-arrow" *ngIf="!toggleTags" name="arrow-dropdown-circle"></ion-icon>
-        <ion-icon class="tag-arrow" *ngIf="toggleTags" name="arrow-dropup-circle"></ion-icon>
+        <ion-icon class="tag-arrow" *ngIf="!toggleTags" name="arrow-dropright"></ion-icon>
+        <ion-icon class="tag-arrow" *ngIf="toggleTags" name="arrow-dropdown"></ion-icon>
       </button>
       <div *ngIf="toggleTags">
         <div *ngFor="let item of tags" class="tag-container">
@@ -54,8 +54,8 @@
       </div>
       <button class="item-background tag-head" (click)="toggleForLocates()">
         <span class="tag-span">地址</span>
-        <ion-icon class="tag-arrow" *ngIf="!toggleLocates" name="arrow-dropdown-circle"></ion-icon>
-        <ion-icon class="tag-arrow" *ngIf="toggleLocates" name="arrow-dropup-circle"></ion-icon>
+        <ion-icon class="tag-arrow" *ngIf="!toggleLocates" name="arrow-dropright"></ion-icon>
+        <ion-icon class="tag-arrow" *ngIf="toggleLocates" name="arrow-dropdown"></ion-icon>
       </button>
       <div *ngIf="toggleLocates">
         <div *ngFor="let item of locates" class="tag-container">
