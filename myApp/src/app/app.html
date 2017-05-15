@@ -42,9 +42,8 @@
           <div class="tag-item" [ngClass]="{'tag-item-selected': (tagSelected && item == lastTagItem)}" (click)="selectTag(item)">
             {{item}}
           </div>
-          <div class="tag-icon">
-            <ion-icon name="close" style="display:block;" (click)="deleteTag(item)"></ion-icon>
-            <ion-icon name="create" style="display:block;"></ion-icon>
+          <div class="tag-close">
+            <ion-icon name="close" style="margin: 17px 6px;" (click)="deleteTag(item)"></ion-icon>
           </div>
         </div>
 
@@ -62,9 +61,8 @@
           <div class="tag-item" [ngClass]="{'tag-item-selected': (locationSelected && item == lastLocationItem)}" (click)="selectLocation(item)">
             {{item}}
           </div>
-          <div class="tag-icon">
-            <ion-icon name="close" style="display:block;" (click)="deleteLocate(item)"></ion-icon>
-            <ion-icon name="create" style="display:block;"></ion-icon>
+          <div class="tag-close">
+            <ion-icon name="close" style="margin: 17px 6px;" (click)="deleteLocate(item)"></ion-icon>
           </div>
         </div>
 
