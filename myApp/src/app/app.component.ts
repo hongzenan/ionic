@@ -208,12 +208,29 @@ export class MyApp {
   }
 
   deleteTag(item) {
-    let index = this.tags.indexOf(item);
-    if (index > -1) {
-      this.tags.splice(index, 1);
-    }
-    const database_tags = this.angfire.database.object('users/' + this.user_uid + '/tags');
-    database_tags.set(this.tags);
+    let confirm = this.alertCtrl.create({
+      title: '删除提醒',
+      message: '确定删除 ' + item + ' 标签吗？',
+      buttons: [
+        {
+          text: '否',
+          handler: () => {
+          }
+        },
+        {
+          text: '是',
+          handler: () => {
+            let index = this.tags.indexOf(item);
+            if (index > -1) {
+              this.tags.splice(index, 1);
+            }
+            const database_tags = this.angfire.database.object('users/' + this.user_uid + '/tags');
+            database_tags.set(this.tags);
+          }
+        }
+      ]
+    });
+    confirm.present();
   }
 
   addLocate() {
@@ -246,12 +263,29 @@ export class MyApp {
   }
 
   deleteLocate(item) {
-    let index = this.locates.indexOf(item);
-    if (index > -1) {
-      this.locates.splice(index, 1);
-    }
-    const database_locates = this.angfire.database.object('users/' + this.user_uid + '/locates');
-    database_locates.set(this.locates);
+    let confirm = this.alertCtrl.create({
+      title: '删除提醒',
+      message: '确定删除 ' + item + ' 地址吗？',
+      buttons: [
+        {
+          text: '否',
+          handler: () => {
+          }
+        },
+        {
+          text: '是',
+          handler: () => {
+            let index = this.locates.indexOf(item);
+            if (index > -1) {
+              this.locates.splice(index, 1);
+            }
+            const database_locates = this.angfire.database.object('users/' + this.user_uid + '/locates');
+            database_locates.set(this.locates);
+          }
+        }
+      ]
+    });
+    confirm.present();
   }
 
   toggleForLocates() {
