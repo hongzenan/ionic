@@ -9,34 +9,23 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding class="scroll-content">
+<ion-content class="scroll-content whole-background">
   <ion-list *ngFor="let month of diarys_array">
     <ion-list-header>
       {{ month.month }}
     </ion-list-header>
     <ion-item-sliding *ngFor="let item of month.diarys">
-      <ion-item style ion-item  class="diary-item" (click)="goToDetail(item)">
+      <ion-item style ion-item class="diary-item" (click)="goToDetail(item)">
         <!--<button style ion-item *ngFor="let item of month.diarys" class="diary-item" (click)="goToDetail(item)">-->
-          <div class="tag-color-side-bar"></div>
-          <div class="item-time-middle-bar">
-            <div class="item-time-bar-one">{{ item.date.day }}</div>
-            <div class="item-time-bar-one">{{ item.date.date }}</div>
-            <div class="item-time-bar-one">{{ item.date.hours}} : {{ item.date.minutes}}</div>
-          </div>
-          <div class="item-content-preview">
-            <div class="item-content-preview-title">{{ item.text_title }} {{ item.text_content }}</div>
-            <div class="item-content-preview-tags">
-              <div class="item-content-preview-tags-item">
-                <ion-icon name="add"></ion-icon>
-              </div>
-              <div class="item-content-preview-tags-item">
-                <ion-icon name="image"></ion-icon>
-              </div>
-              <div class="item-content-preview-tags-item">
-                <ion-icon name="pin"></ion-icon>
-              </div>
-            </div>
-          </div>
+        <div class="item-time-middle-bar">
+          <div class="item-time-bar-one">{{ item.date.day }}</div>
+          <div class="item-time-bar-one">{{ item.date.date }}</div>
+          <div class="item-time-bar-one">{{ item.date.hours}} : {{ item.date.minutes}}</div>
+        </div>
+        <div class="item-content-preview">
+          <div class="item-content-preview-title span-nowrap">{{ item.text_title }}</div>
+          <div class="item-content-preview-content span-nowrap">{{ item.text_content }}</div>
+        </div>
         <!--</button>-->
       </ion-item>
       <ion-item-options>
