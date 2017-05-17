@@ -6,6 +6,10 @@
     <ion-title>
       首页
     </ion-title>
+    <ion-buttons end>
+      <button ion-button style="background-color: rgba(0, 0, 128, .1);font-family: sans-serif;" (click)="signout()">退出
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
@@ -33,20 +37,6 @@
       </ion-item-options>
     </ion-item-sliding>
   </ion-list>
-
-  <button ion-button (click)="show()">Show</button>
-  <ion-list>
-    <div>
-      Welcome {{user}}
-    </div>
-  </ion-list>
-  <ul>
-    <li *ngFor="let item of items | async">
-      {{ item | json }}
-    </li>
-  </ul>
-  <button ion-button (click)="signout()">Logout</button>
-  <button ion-button (click)="save()">Save</button>
 
   <ion-fab bottom right="10px">
     <button ion-fab (click)="addTopic()">

@@ -45,7 +45,7 @@ page-home {
     }
   }
   .diary-item {
-    background-color: rgba(255, 255, 255, 1);
+    background-color: rgba(0, 191, 255, .8);
     height: 70px;
     color: rgba(0, 0, 0, .8);
     .item-time-middle-bar {
@@ -54,6 +54,7 @@ page-home {
       vertical-align: top;
       display: inline-block;
       .item-time-bar-one {
+        font-family: sans-serif;
         height: 17px;
         line-height: 17px;
         text-align: center;
@@ -75,6 +76,7 @@ page-home {
         line-height: 25px;
       }
       .span-nowrap {
+        font-family: sans-serif;
         width: 220px;
         white-space: nowrap;
         overflow: hidden;

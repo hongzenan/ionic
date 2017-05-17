@@ -49,6 +49,7 @@
       color: #E6E8DB;
       text-align: center;
       span {
+        font-family: sans-serif;
         font-size: 16px;
         color: #000;
         font-weight: 600;
@@ -61,6 +62,7 @@
     margin-top: -50px;
     text-align: center;
     .user-diary-today-count {
+      font-family: sans-serif;
       font-size: 16px;
       color: #E6E8DB;
       line-height: 50px;
@@ -68,6 +70,7 @@
       display: inline-block;
     }
     .user-diary-all-count {
+      font-family: sans-serif;
       font-size: 16px;
       color: #E6E8DB;
       line-height: 50px;
@@ -130,6 +133,7 @@
     display: inline-block;
   }
   .tag-span {
+    font-family: sans-serif;
     color: white;
   }
   .tag-arrow {
