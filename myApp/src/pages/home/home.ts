@@ -314,7 +314,8 @@ export class HomePage {
     listenSignout() {
         this.events.subscribe('signout', () => {
             this.diarys_array = [];
-            this.observableDiarys.unsubscribe();
+            if (this.observableDiarys)
+                this.observableDiarys.unsubscribe();
         });
     }
 

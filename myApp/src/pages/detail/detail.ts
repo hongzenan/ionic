@@ -133,10 +133,9 @@ export class DetailPage {
       title: "choose images",
       buttons: [
         {
-          text: 'Destructive',
+          text: '从相册选择',
           role: 'destructive',
           handler: () => {
-            console.log('Destructive clicked');
             FileChooser.open().then((url) => {
               (<any>window).FilePath.resolveNativePath(url, (result) => {
                 this.nativepath = result;
@@ -146,10 +145,9 @@ export class DetailPage {
           }
         },
         {
-          text: 'Archive',
+          text: '拍照',
           role: 'archive',
           handler: () => {
-            console.log('Archive clicked');
             const cameraOptions: CameraOptions = {
               quality: 50,
               destinationType: Camera.DestinationType.FILE_URI,
@@ -166,10 +164,9 @@ export class DetailPage {
           }
         },
         {
-          text: 'Cancel',
+          text: '取消',
           role: 'cancel',
           handler: () => {
-            console.log('Cancel clicked');
           }
         }
       ]
@@ -204,11 +201,10 @@ export class DetailPage {
           let imageStore = this.firestore.ref().child('images/' + lastOfArray);
           imageStore.put(imgBlob).then((res) => {
             this.imagesForStorage.push(lastOfArray);
-            alert('Upload Success');
-            alert('picture: ' + lastOfArray);
+            alert('照片上传成功');
             this.downloadimages();
           }).catch((err) => {
-            alert('Upload Failed');
+            alert('照片上传失败');
           });
         }
       });
@@ -319,9 +315,9 @@ export class DetailPage {
         value: i
       });
     }
-    alert.addButton('Cancel');
+    alert.addButton('取消');
     alert.addButton({
-      text: 'OK',
+      text: '确定',
       handler: data => {
         this.RadioLocationOpen = false;
         this.location = data;
@@ -346,9 +342,9 @@ export class DetailPage {
     } else {
       alert.setTitle('没有标签，请先添加');
     }
-    alert.addButton('Cancel');
+    alert.addButton('取消');
     alert.addButton({
-      text: 'OK',
+      text: '确定',
       handler: data => {
         this.RadioTagOpen = false;
         this.tag = data;
