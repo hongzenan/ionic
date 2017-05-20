@@ -131,7 +131,7 @@ export class MyApp {
             });
           });
         } else {
-          this.picture = "http://csssecrets.io/images/adamcatlace.jpg";
+          this.picture = "";
         }
       });
     }
@@ -348,10 +348,20 @@ export class MyApp {
       this.tags = [];
       this.locates = [];
       this.picture = "";
-      this.observableTags.unsubscribe();
-      this.observableLocates.unsubscribe();
-      this.observableDiarys.unsubscribe();
-      this.observalbePicture.unsubscribe();
+      this.lastTagItem = "";
+      this.lastLocationItem = "";
+      this.myInput = "";
+      this.toggleDate = false;
+      this.toggleTags = false;
+      this.toggleLocates = false;
+      if (this.observableDiarys) {
+        this.observableTags.unsubscribe();
+        this.observableLocates.unsubscribe();
+        this.observableDiarys.unsubscribe();
+      }
+      if (this.observalbePicture) {
+        this.observalbePicture.unsubscribe();
+      }
     });
   }
 
@@ -360,6 +370,8 @@ export class MyApp {
       this.observableTags.unsubscribe();
       this.observableLocates.unsubscribe();
       this.observableDiarys.unsubscribe();
+    }
+    if (this.observalbePicture) {
       this.observalbePicture.unsubscribe();
     }
   }

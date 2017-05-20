@@ -1,5 +1,5 @@
 import { Component } from '@angular/core'
-import { NavController, ToastController, Events } from 'ionic-angular';
+import { NavController, ToastController, Events, AlertController, MenuController } from 'ionic-angular';
 import { AngularFire } from 'angularfire2';
 
 // pages
@@ -48,9 +48,12 @@ export class HomePage {
     itemQuery: string = "";
     database_diarys: any;
     observableDiarys: any;
+    data: boolean = false;
 
     constructor(public navCtrl: NavController, public angfire: AngularFire, private authservice: AuthService,
-        public toastCtrl: ToastController, public events: Events) {
+        public toastCtrl: ToastController, public events: Events, public alertCtrl: AlertController,
+        public menu: MenuController) {
+        menu.enable(true);
         // events事件大军
         this.listenTag();
         this.listenLocation();
@@ -66,7 +69,7 @@ export class HomePage {
     getRealData() {
         this.user = "";
         if (!this.isLoggedin()) {
-            this.navCtrl.push(LoginPage)
+            this.navCtrl.setRoot(LoginPage);
         } else {
             this.user = window.localStorage.getItem('currentuser');
             this.user_detail = JSON.parse(window.localStorage.getItem('firebase:authUser:AIzaSyDRnt4FM3wfjsIW3_oLQJSSsxN5oFF9Xeg:[DEFAULT]'));
@@ -149,6 +152,7 @@ export class HomePage {
                     }
                     this.diarys_array.push(this.diarys_array_item);
                 }
+                this.data = true;
             });
         }
     }
@@ -173,10 +177,27 @@ export class HomePage {
     }
 
     signout() {
-        this.events.publish('signout');
-        this.authservice.signOut().then(() => {
-            this.navCtrl.push(LoginPage);
+        let alert = this.alertCtrl.create({
+            title: '退出登录提醒',
+            message: '确定退出登录？',
+            buttons: [
+                {
+                    text: '否',
+                    handler: () => {
+                    }
+                },
+                {
+                    text: '是',
+                    handler: () => {
+                        this.events.publish('signout');
+                        this.authservice.signOut().then(() => {
+                            this.navCtrl.setRoot(LoginPage);
+                        });
+                    }
+                }
+            ]
         });
+        alert.present();
     }
 
     addTopic() {

@@ -1,5 +1,5 @@
 import { Component, NgZone } from '@angular/core';
-import { NavController, NavParams, ActionSheetController, AlertController } from 'ionic-angular';
+import { NavController, NavParams, ActionSheetController, AlertController, MenuController } from 'ionic-angular';
 
 import { ImagesPage } from '../images/images';
 import { ImageDetailPage } from '../image-detail/image-detail';
@@ -70,7 +70,9 @@ export class DetailPage {
   constructor(public navCtrl: NavController, public navParams: NavParams,
     public actionCtrl: ActionSheetController, public datePicker: DatePicker,
     public angfire: AngularFire, public http: Http,
-    public alertCtrl: AlertController, public geolocation: Geolocation, public zone: NgZone) {
+    public alertCtrl: AlertController, public geolocation: Geolocation, public zone: NgZone,
+    public menu: MenuController) {
+    menu.enable(false);
     this.item = this.navParams.get("item");
     this.diarys = JSON.parse(window.localStorage.getItem('diarys')) || [];
 
@@ -369,6 +371,7 @@ export class DetailPage {
   }
 
   ionViewWillUnload() {
+    this.menu.enable(true);
     const database_diarys = this.angfire.database.object('users/' + this.user_uid + '/diarys');
     let temp_for_diary = {
       date: this.dateContain,

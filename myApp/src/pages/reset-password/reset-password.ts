@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, AlertController } from 'ionic-angular';
+import { NavController, NavParams, AlertController, MenuController } from 'ionic-angular';
 import { AuthService } from "../../providers/auth-service";
 
 /*
@@ -16,7 +16,9 @@ export class ResetPasswordPage {
   email: string = "";
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
-    public authservice: AuthService, public alertCtrl: AlertController) { }
+    public authservice: AuthService, public alertCtrl: AlertController, public menu: MenuController) {
+    menu.enable(false);
+  }
 
   ionViewDidLoad() {
   }

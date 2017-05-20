@@ -14,6 +14,12 @@
 </ion-header>
 
 <ion-content class="scroll-content whole-background">
+  <div *ngIf="!data" class="loading">
+    <div class="loading-bar"></div>
+    <div class="loading-bar"></div>
+    <div class="loading-bar"></div>
+    <div class="loading-bar"></div>
+  </div>
   <ion-list *ngFor="let month of diarys_array">
     <ion-list-header>
       {{ month.month }}

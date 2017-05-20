@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, Events, AlertController } from 'ionic-angular';
+import { NavController, NavParams, Events, AlertController, MenuController } from 'ionic-angular';
 
 import { AuthService } from '../../providers/auth-service';
 
-import { RegisterPage } from '../register/register';
+import { HomePage } from "../home/home";
 import { ResetPasswordPage } from "../reset-password/reset-password";
 /*
   Generated class for the Login page.
@@ -20,7 +20,10 @@ export class LoginPage {
   password: any
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
-    public authservice: AuthService, public events: Events, public alertCtrl: AlertController) { }
+    public authservice: AuthService, public events: Events, public alertCtrl: AlertController,
+    public menu: MenuController) { 
+      menu.enable(false);
+    }
 
   ionViewDidLoad() {
   }
@@ -29,8 +32,8 @@ export class LoginPage {
     this.authservice.login(this.email, this.password)
       .then((response) => {
         if (response) {
-          this.navCtrl.pop();
           this.events.publish('login');
+          this.navCtrl.setRoot(HomePage);
         }
       })
       .catch((error) => console.log("Cann't login success ", error));
@@ -41,9 +44,10 @@ export class LoginPage {
       .then((response) => {
         if (response) {
           let alert = this.alertCtrl.create({
-            subTitle: "注册成功",
+            subTitle: "注册" + this.email + "成功",
             buttons: ['OK']
           });
+          this.clearText();
           alert.present();
         } else {
           let alert = this.alertCtrl.create({
@@ -61,6 +65,7 @@ export class LoginPage {
   }
 
   toResetPassword() {
+    this.clearText();
     this.navCtrl.push(ResetPasswordPage);
   }
 }
