@@ -67,6 +67,8 @@ export class DetailPage {
   nativepath: any;
   firestore = firebase.storage();
 
+  uploadImage: boolean = false;
+
   constructor(public navCtrl: NavController, public navParams: NavParams,
     public actionCtrl: ActionSheetController, public datePicker: DatePicker,
     public angfire: AngularFire, public http: Http,
@@ -141,6 +143,8 @@ export class DetailPage {
             FileChooser.open().then((url) => {
               (<any>window).FilePath.resolveNativePath(url, (result) => {
                 this.nativepath = result;
+                this.lastImage = "";
+                this.uploadImage = true;
                 this.uploadimages();
               });
             });
@@ -159,8 +163,9 @@ export class DetailPage {
             };
 
             Camera.getPicture(cameraOptions).then((imageData) => {
-              alert(imageData);
               this.nativepath = imageData;
+              this.lastImage = "";
+              this.uploadImage = true;
               this.uploadimages();
             });
           }
@@ -203,7 +208,7 @@ export class DetailPage {
           let imageStore = this.firestore.ref().child('images/' + lastOfArray);
           imageStore.put(imgBlob).then((res) => {
             this.imagesForStorage.push(lastOfArray);
-            alert('照片上传成功');
+            this.uploadImage = false;
             this.downloadimages();
           }).catch((err) => {
             alert('照片上传失败');

@@ -19,6 +19,14 @@
 
 
 <ion-content padding>
+<div *ngIf="uploadImage" class="loading">
+    上传图片中
+    <div class="loading-bar"></div>
+    <div class="loading-bar"></div>
+    <div class="loading-bar"></div>
+    <div class="loading-bar"></div>
+  </div>
+
   <div class="image-wrap">
     <div><img class="image" [src]="lastImage"></div>
   </div>

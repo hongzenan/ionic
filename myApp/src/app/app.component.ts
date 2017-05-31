@@ -1,5 +1,5 @@
-import { Component, NgZone } from '@angular/core';
-import { Platform, AlertController, Events } from 'ionic-angular';
+import { Component, NgZone, ViewChild } from '@angular/core';
+import { Platform, AlertController, Events, NavController, IonicApp, ToastController, Keyboard } from 'ionic-angular';
 import { StatusBar, Splashscreen } from 'ionic-native';
 
 import { HomePage } from '../pages/home/home';
@@ -12,7 +12,7 @@ import * as firebase from 'firebase';
   templateUrl: 'app.html'
 })
 export class MyApp {
-  // @ViewChild('content') navCtrl: NavController;
+  @ViewChild('content') navCtrl: NavController;
   rootPage: any = HomePage
   // the basic user information
   user: any;
@@ -49,13 +49,16 @@ export class MyApp {
   observableDiarys: any;
   nativepath: any;
   observalbePicture: any;
+  backButtonPressed: boolean = false;
 
 
-  constructor(platform: Platform, public angfire: AngularFire,
-    public alertCtrl: AlertController, public zone: NgZone, public events: Events) {
+  constructor(public platform: Platform, public ionicApp: IonicApp, public angfire: AngularFire,
+    public alertCtrl: AlertController, public zone: NgZone, public events: Events,
+    public toastCtrl: ToastController, public keyBoard: Keyboard) {
     platform.ready().then(() => {
       StatusBar.styleDefault()
       Splashscreen.hide()
+      this.registerBackButtonAction();
     });
 
     this.listenTotalItems();
@@ -66,6 +69,39 @@ export class MyApp {
     this.getRealData();
 
     this.downloadimage();
+  }
+
+  registerBackButtonAction() {
+    this.platform.registerBackButtonAction(() => {
+      if (this.keyBoard.isOpen()) {
+        this.keyBoard.close();
+        return;
+      } else {
+        let activePortal = this.ionicApp._modalPortal.getActive();
+        if (activePortal) {
+          activePortal.dismiss().catch(() => { });
+          activePortal.onDidDismiss(() => { });
+          return;
+        }
+        return this.navCtrl.canGoBack() ? this.navCtrl.pop() : this.showExit();
+      }
+    });
+  }
+
+  showExit() {
+    if (this.backButtonPressed) {
+      this.platform.exitApp();
+    } else {
+      this.toastCtrl.create({
+        message: '再按一次退出应用',
+        duration: 2000,
+        position: 'top',
+      }).present();
+      this.backButtonPressed = true;
+      setTimeout(() => {
+        this.backButtonPressed = false;
+      }, 2000);
+    }
   }
 
   getRealData() {
@@ -151,8 +187,6 @@ export class MyApp {
             this.picture = lastOfArray;
             const database_picture = this.angfire.database.object('users/' + this.user_uid + '/picture');
             database_picture.set(this.picture);
-            alert('Upload Success');
-            alert('picture: ' + lastOfArray);
             this.downloadimage();
           }).catch((err) => {
             alert('Upload Failed');
@@ -195,10 +229,12 @@ export class MyApp {
         {
           text: 'Save',
           handler: data => {
-            this.addTagItem = data.tag;
-            this.tags.push(this.addTagItem);
-            const database_tags = this.angfire.database.object('users/' + this.user_uid + '/tags');
-            database_tags.set(this.tags);
+            if (data.tag != "") {
+              this.addTagItem = data.tag;
+              this.tags.push(this.addTagItem);
+              const database_tags = this.angfire.database.object('users/' + this.user_uid + '/tags');
+              database_tags.set(this.tags);
+            }
           }
         }
       ]
@@ -250,10 +286,12 @@ export class MyApp {
         {
           text: 'Save',
           handler: data => {
-            this.addLocateItem = data.locate;
-            this.locates.push(this.addLocateItem);
-            const database_locates = this.angfire.database.object('users/' + this.user_uid + '/locates');
-            database_locates.set(this.locates);
+            if (data.locate != "") {
+              this.addLocateItem = data.locate;
+              this.locates.push(this.addLocateItem);
+              const database_locates = this.angfire.database.object('users/' + this.user_uid + '/locates');
+              database_locates.set(this.locates);
+            }
           }
         }
       ]
